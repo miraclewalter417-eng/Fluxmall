@@ -1,540 +1,735 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="/img/logo.png" type="image/x-icon" />
     <title>Account | Flash sales</title>
-    <link rel="stylesheet" href="account.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-</head>
+    <link rel="stylesheet" href="account.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Space+Grotesk:wght@300..700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
 
-<body>
+  <body>
     <div class="shape shape-1"></div>
-    <div id="referrerSection" style="display: none;" class="referrer-box">
-        <div class="referrer-info">
-            <i class="ri-user-follow-line"></i>
-            <span>You were invited by <b id="referrerName" style="color: var(--primary);">...</b></span>
-        </div>
+    <div id="referrerSection" style="display: none" class="referrer-box">
+      <div class="referrer-info">
+        <i class="ri-user-follow-line"></i>
+        <span
+          >You were invited by
+          <b id="referrerName" style="color: var(--primary)">...</b></span
+        >
+      </div>
     </div>
-    
+
     <section class="page"></section>
     <section class="page hidden" id="404Page">
-        <div class="error-container">
-            <div class="error-card">
-                <div class="brand-logo">
-                    <img width="35" height="35" style="margin: 0 auto;" src="/img/logo.png" alt="logo" />
-                </div>
-                <h1 style="  font-size: 5rem;
-            font-weight: 800;
-            letter-spacing: -2px;
-            background: linear-gradient(to bottom, #fff, #64748b);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;">404</h1>
-                <span class="status-tag">Page Not Found</span>
-                <p style="color: #f4f4f4;;">The requested page cannot be found right now on this server </p><br>
-                <button class="signin-btn" onclick="showPage('login-page')">Return Home</button>
-                <span class="back-link" onclick="history.back(); return false;">← Go Back</span>
-            </div>
+      <div class="error-container">
+        <div class="error-card">
+          <div class="brand-logo">
+            <img
+              width="35"
+              height="35"
+              style="margin: 0 auto"
+              src="/img/logo.png"
+              alt="logo"
+            />
+          </div>
+          <h1
+            style="
+              font-size: 5rem;
+              font-weight: 800;
+              letter-spacing: -2px;
+              background: linear-gradient(to bottom, #fff, #64748b);
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+            "
+          >
+            404
+          </h1>
+          <span class="status-tag">Page Not Found</span>
+          <p style="color: #f4f4f4">
+            The requested page cannot be found right now on this server
+          </p>
+          <br />
+          <button class="signin-btn" onclick="showPage('login-page')">
+            Return Home
+          </button>
+          <span
+            class="back-link"
+            onclick="
+              history.back();
+              return false;
+            "
+            >← Go Back</span
+          >
         </div>
+      </div>
     </section>
-    
-    
+
     <section id="forgot-password-page" class="page hidden">
-        <div class="login-card">
-            <div class="info-side">
-                <div class="brand-logo">
-                    <img width="35" class="logo-img" height="35" src="/img/logo.png" alt="logo" />
-                    <h1 class="site-name">Flash sales</h1>
-                </div>
-                <div class="info-content">
-                    <h2>Password Reset</h2>
-                    <p>Enter your email and we'll send you a recovery link.</p>
-                </div>
-            </div>
-            
-            <div class="form-side">
-                <div class="form-header">
-                    <div class="security-alert">
-                        <p><i class="fas fa-warning"></i>Only enter a Registered Email</p>
-                    </div>
-                </div>
-                <form class="signup-form" id="resetForm">
-                    <div class="input-group">
-                        <label for="reset-email">Registered Email: <span>*</span></label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-envelope input-icon"></i>
-                            <input type="email" id="resetEmail" name="reset-email" placeholder="Enter a registered Email" required>
-                        </div>
-                        <p id="resetEmailError" class="error-message"></p>
-                    </div>
-                    
-                    <button type="submit" class="signin-btn" disabled>Send Reset Link</button>
-                    <div class="form-footer">
-                        <a onclick="showPage('login-page')" class="create-link"><i class="fas fa-arrow-left"></i>
-                            Back to Login</a>
-                    </div>
-                </form>
-            </div>
+      <div class="login-card">
+        <div class="info-side">
+          <div class="brand-logo">
+            <img
+              width="35"
+              class="logo-img"
+              height="35"
+              src="/img/logo.png"
+              alt="logo"
+            />
+            <h1 class="site-name">Flash sales</h1>
+          </div>
+          <div class="info-content">
+            <h2>Password Reset</h2>
+            <p>Enter your email and we'll send you a recovery link.</p>
+          </div>
         </div>
+
+        <div class="form-side">
+          <div class="form-header">
+            <div class="security-alert">
+              <p><i class="fas fa-warning"></i>Only enter a Registered Email</p>
+            </div>
+          </div>
+          <form class="signup-form" id="resetForm">
+            <div class="input-group">
+              <label for="reset-email">Registered Email: <span>*</span></label>
+              <div class="input-wrapper">
+                <i class="fas fa-envelope input-icon"></i>
+                <input
+                  type="email"
+                  id="resetEmail"
+                  name="reset-email"
+                  placeholder="Enter a registered Email"
+                  required
+                />
+              </div>
+              <p id="resetEmailError" class="error-message"></p>
+            </div>
+
+            <button type="submit" class="signin-btn" disabled>
+              Send Reset Link
+            </button>
+            <div class="form-footer">
+              <a onclick="showPage('login-page')" class="create-link"
+                ><i class="fas fa-arrow-left"></i> Back to Login</a
+              >
+            </div>
+          </form>
+        </div>
+      </div>
     </section>
-    
+
     <section id="login-page" class="page hidden">
-        <div class="login-card">
-            <div class="info-side">
-                <div class="brand-logo">
-                    <img width="35" class="logo-img" height="35" src="/img/logo.png" alt="logo" />
-                    <h1 class="site-name">Flux mall</h1>
-                </div>
-            </div>
-            
-            <div class="form-side">
-                <div class="form-header">
-                    <h2>Login Your Account</h2>
-                    <p>Fill in the details to proceed.</p>
-                </div>
-                
-                <form class="signup-form" id="loginForm">
-                    <div class="input-group">
-                        <label for="login-email">Registered Email: <span><i class="fa-solid fa-envelope"></i></span></label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-envelope input-icon"></i>
-                            <input type="email" id="loginEmail" name="login-email" placeholder="Enter your Email" required>
-                        </div>
-                        <p id="loginEmailError" class="error-message"></p>
-                    </div>
-                    <div class="input-group">
-                        <label for="signup-password">Password: <span>*</span></label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-key input-icon"></i>
-                            <input type="password" id="loginPassword" name="login-password" placeholder="Enter Password" required>
-                            <i onclick="togglePassword(loginPassword)" class="fas fa-eye"></i>
-                        </div>
-                        <p id="loginPasswordError" class="error-message"></p>
-                    </div>
-                    <div style="display:flex; justify-content: space-between;width:100%;margin-bottom: 15px;">
-                        <p class="checkbox-group">
-                            <input type="checkbox" name="recall" id="recall">
-                            <label for="recall">Remember me</label>
-                        </p>
-                        <p class="create-link" onclick="showPage('forgot-password-page')">Retrieve password</p>
-                    </div>
-                    
-                    <button class="signin-btn" type="submit">Sign in</button>
-                    <div id="loginFormMessage" class="message-box"></div>
-                    <div class="form-footer">
-                        <a>Don't have an account? <span onclick="showPage('signup-page')" class="create-link">Create
-                                one</span>
-                        </a>
-                    </div>
-                </form>
-            </div>
+      <div class="login-card">
+        <div class="info-side">
+          <div class="brand-logo">
+            <img
+              width="35"
+              class="logo-img"
+              height="35"
+              src="/img/logo.png"
+              alt="logo"
+            />
+            <h1 class="site-name">Flux mall</h1>
+          </div>
         </div>
+
+        <div class="form-side">
+          <div class="form-header">
+            <h2>Login Your Account</h2>
+            <p>Fill in the details to proceed.</p>
+          </div>
+
+          <form class="signup-form" id="loginForm">
+            <div class="input-group">
+              <label for="login-email"
+                >Registered Email:
+                <span><i class="fa-solid fa-envelope"></i></span
+              ></label>
+              <div class="input-wrapper">
+                <i class="fas fa-envelope input-icon"></i>
+                <input
+                  type="email"
+                  id="loginEmail"
+                  name="login-email"
+                  placeholder="Enter your Email"
+                  required
+                />
+              </div>
+              <p id="loginEmailError" class="error-message"></p>
+            </div>
+            <div class="input-group">
+              <label for="signup-password">Password: <span>*</span></label>
+              <div class="input-wrapper">
+                <i class="fas fa-key input-icon"></i>
+                <input
+                  type="password"
+                  id="loginPassword"
+                  name="login-password"
+                  placeholder="Enter Password"
+                  required
+                />
+                <i
+                  onclick="togglePassword(loginPassword)"
+                  class="fas fa-eye"
+                ></i>
+              </div>
+              <p id="loginPasswordError" class="error-message"></p>
+            </div>
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                width: 100%;
+                margin-bottom: 15px;
+              "
+            >
+              <p class="checkbox-group">
+                <input type="checkbox" name="recall" id="recall" />
+                <label for="recall">Remember me</label>
+              </p>
+              <p class="create-link" onclick="showPage('forgot-password-page')">
+                Retrieve password
+              </p>
+            </div>
+
+            <button class="signin-btn" type="submit">Sign in</button>
+            <div id="loginFormMessage" class="message-box"></div>
+            <div class="form-footer">
+              <a
+                >Don't have an account?
+                <span onclick="showPage('signup-page')" class="create-link"
+                  >Create one</span
+                >
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
     </section>
-    
+
     <section id="upgrade-page" class="page hidden">
-        <div class="login-card">
-            <div class="info-side">
-                <div class="brand-logo">
-                    <img width="35" class="logo-img" height="35" src="/img/logo.png" alt="logo" />
-                    <h1 class="site-name">Flash sales</h1>
-                </div>
-                <div class="info-content">
-                    <h2>Welcome Back</h2>
-                    <p id="login-hint">* Go from your Dashboard to Account Action page to activate Account Upgrade
-                        mode...</p><br />
-                </div>
-            </div>
-            
-            <div class="form-side">
-                <div class="form-header">
-                    <h2>Plan upgrade</h2>
-                    <p>Insert Unique code to continue.</p>
-                </div>
-                
-                <form id="upgradeForm" class="signup-form">
-                    <div class="input-group">
-                        <label for="upgrade-email">Upgrade for: <span>*</span></label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-envelope input-icon"></i>
-                            <input type="text" id="upgrade-email" name="email-upgrade" placeholder="Enter your Email" disabled>
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <label for="upgrade-code">Upgrade code: <span>*</span></label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-code input-icon"></i>
-                            <input type="text" id="upgrade-code" name="username" placeholder="Enter your upgrade code" required>
-                        </div>
-                        <p id="upgradeCodeError" class="error-message"></p>
-                    </div>
-                    <br>
-                    <button type="submit" class="signin-btn" id="submit-upgrade">Upgrade</button><br />
-                    <br>
-                    <p class="create-link" onclick="showPage('code-vendors');showAlert('Contact any of the <b>Vendors</b> to get your <b>Upgrade</b> code..',true)">
-                        Get upgrade code</p>
-                </form>
-            </div>
+      <div class="login-card">
+        <div class="info-side">
+          <div class="brand-logo">
+            <img
+              width="35"
+              class="logo-img"
+              height="35"
+              src="/img/logo.png"
+              alt="logo"
+            />
+            <h1 class="site-name">Flash sales</h1>
+          </div>
+          <div class="info-content">
+            <h2>Welcome Back</h2>
+            <p id="login-hint">
+              * Go from your Dashboard to Account Action page to activate
+              Account Upgrade mode...
+            </p>
+            <br />
+          </div>
         </div>
+
+        <div class="form-side">
+          <div class="form-header">
+            <h2>Plan upgrade</h2>
+            <p>Insert Unique code to continue.</p>
+          </div>
+
+          <form id="upgradeForm" class="signup-form">
+            <div class="input-group">
+              <label for="upgrade-email">Upgrade for: <span>*</span></label>
+              <div class="input-wrapper">
+                <i class="fas fa-envelope input-icon"></i>
+                <input
+                  type="text"
+                  id="upgrade-email"
+                  name="email-upgrade"
+                  placeholder="Enter your Email"
+                  disabled
+                />
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="upgrade-code">Upgrade code: <span>*</span></label>
+              <div class="input-wrapper">
+                <i class="fas fa-code input-icon"></i>
+                <input
+                  type="text"
+                  id="upgrade-code"
+                  name="username"
+                  placeholder="Enter your upgrade code"
+                  required
+                />
+              </div>
+              <p id="upgradeCodeError" class="error-message"></p>
+            </div>
+            <br />
+            <button type="submit" class="signin-btn" id="submit-upgrade">
+              Upgrade</button
+            ><br />
+            <br />
+            <p
+              class="create-link"
+              onclick="
+                showPage('code-vendors');
+                showAlert(
+                  'Contact any of the <b>Vendors</b> to get your <b>Upgrade</b> code..',
+                  true,
+                );
+              "
+            >
+              Get upgrade code
+            </p>
+          </form>
+        </div>
+      </div>
     </section>
-    
+
     <section id="signup-page" class="page hidden">
-        <div class="login-card">
-            <div class="info-side">
-                <div class="brand-logo">
-                    <img width="35" class="logo-img" height="35" src="/img/logo.png" alt="logo" />
-                    <h1 class="site-name">Flux mall</h1>
-                </div>
-            </div>
-            
-            <div class="form-side">
-                <div class="form-header">
-                    <h2>Create an Account</h2>
-                    <p>Fill in the details to get started.</p>
-                </div>
-                <form id="signupForm" class="signup-form">
-                    <div class="input-group">
-                        <label for="username">Username: <span><i class="fa-solid fa-envelope"></i></span></label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-user input-icon"></i>
-                            <input type="text" id="username" name="username" placeholder="E.g Carlos brown" required>
-                        </div>
-                        <p id="usernameError" class="error-message"></p>
-                    </div>
-                    <div class="input-group">
-                        <label for="signup-email">Email: <span></span></label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-envelope input-icon"></i>
-                            <input type="email" id="email" name="signup-email" placeholder="Enter your Email" required>
-                        </div>
-                        <p id="emailError" class="error-message"></p>
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="signup-password">Password: <span></span></label>
-                        <div class="input-wrapper">
-                            <span class="input-icon">🔒</span>
-                            <input type="password" id="password" name="signup-password" placeholder="Enter Password" required>
-                            <span onclick="togglePassword(password)">👁️</span>
-                        </div>
-                        <p id="passwordError" class="error-message"></p>
-                    </div>
-                    <div class="input-group">
-                        <label for="referralCode">Referral Id:</label>
-                        <div class="input-wrapper">
-                            <span class="input-icon">👥</span>
-                            <i class="fas fa-use "></i>
-                            <input type="text" id="referralCode" name="referralCode" placeholder="Enter Invite code (Optional)">
-                        </div>
-                    </div>
-                    
-                    
-                    <button type="submit" class="signin-btn" id="submit-signup">Sign Up</button>
-                    <div id="formMessage" class="message-box"></div>
-                    <div class="form-footer">
-                        <a>Had an account? <span onclick="showPage('login-page')" class="create-link">Login</span>
-                        </a>
-                    </div>
-                </form>
-            </div>
+      <div class="login-card">
+        <div class="info-side">
+          <div class="brand-logo">
+            <img
+              width="35"
+              class="logo-img"
+              height="35"
+              src="/img/logo.png"
+              alt="logo"
+            />
+            <h1 class="site-name">Flux mall</h1>
+          </div>
         </div>
+
+        <div class="form-side">
+          <div class="form-header">
+            <h2>Create an Account</h2>
+            <p>Fill in the details to get started.</p>
+          </div>
+          <form id="signupForm" class="signup-form">
+            <div class="input-group">
+              <label for="username"
+                >Username: <span><i class="fa-solid fa-envelope"></i></span
+              ></label>
+              <div class="input-wrapper">
+                <i class="fas fa-user input-icon"></i>
+                <input
+                  type="text"
+                  id="username"
+                  name="username"
+                  placeholder="E.g Carlos brown"
+                  required
+                />
+              </div>
+              <p id="usernameError" class="error-message"></p>
+            </div>
+            <div class="input-group">
+              <label for="signup-email">Email: <span></span></label>
+              <div class="input-wrapper">
+                <i class="fas fa-envelope input-icon"></i>
+                <input
+                  type="email"
+                  id="email"
+                  name="signup-email"
+                  placeholder="Enter your Email"
+                  required
+                />
+              </div>
+              <p id="emailError" class="error-message"></p>
+            </div>
+
+            <div class="input-group">
+              <label for="signup-password">Password: <span></span></label>
+              <div class="input-wrapper">
+                <span class="input-icon">🔒</span>
+                <input
+                  type="password"
+                  id="password"
+                  name="signup-password"
+                  placeholder="Enter Password"
+                  required
+                />
+                <span onclick="togglePassword(password)">👁️</span>
+              </div>
+              <p id="passwordError" class="error-message"></p>
+            </div>
+            <div class="input-group">
+              <label for="referralCode">Referral Id:</label>
+              <div class="input-wrapper">
+                <span class="input-icon">👥</span>
+                <i class="fas fa-use"></i>
+                <input
+                  type="text"
+                  id="referralCode"
+                  name="referralCode"
+                  placeholder="Enter Invite code (Optional)"
+                />
+              </div>
+            </div>
+
+            <button type="submit" class="signin-btn" id="submit-signup">
+              Sign Up
+            </button>
+            <div id="formMessage" class="message-box"></div>
+            <div class="form-footer">
+              <a
+                >Had an account?
+                <span onclick="showPage('login-page')" class="create-link"
+                  >Login</span
+                >
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
     </section>
-    
-    
+
     <section id="admin-contact-page" class="page hidden">
-        <div class="login-card">
-            <div class="info-side">
-                <div class="brand-logo">
-                    <img width="35" class="logo-img" height="35" src="/img/logo.png" alt="logo" />
-                    <h1 class="site-name">Flash sales</h1>
-                </div>
-                <div class="info-content">
-                    <h2 style="color: red;">Account Suspended <i class="fas fa-warning"></i></h2>
-                    <p>Our bot flagged that your account actions didn't follow our system's code of conduct <span onclick="showPage('privacy-policy-page')" style="color: green;">see terms</span></p>
-                </div>
-            </div>
-            <div class="form-side"><br>
-                <div class="form-header">
-                    <h2>Request Review!</h2>
-                    <p>If you think this was a mistake you can choose to request a review or <span style="color: green;">contact us</span> for assistance.</p>
-                </div>
-                <br>
-                <strong><i class="fas fa-robot" style="color: red;"></i> Bot's Overview</strong>
-                <p><strong>status</strong> Profile has some Issues -</p>
-                <p><strong>Reason:</strong> User actions didn't follow our standards to be considered as a valid
-                    profile-</p>
-                <p><strong>Tip</strong> User should try requesting a review if it would work-</p>
-                <br>
-                <button id="request-review">Request Review</button>
-            </div>
+      <div class="login-card">
+        <div class="info-side">
+          <div class="brand-logo">
+            <img
+              width="35"
+              class="logo-img"
+              height="35"
+              src="/img/logo.png"
+              alt="logo"
+            />
+            <h1 class="site-name">Flash sales</h1>
+          </div>
+          <div class="info-content">
+            <h2 style="color: red">
+              Account Suspended <i class="fas fa-warning"></i>
+            </h2>
+            <p>
+              Our bot flagged that your account actions didn't follow our
+              system's code of conduct
+              <span
+                onclick="showPage('privacy-policy-page')"
+                style="color: green"
+                >see terms</span
+              >
+            </p>
+          </div>
         </div>
+        <div class="form-side">
+          <br />
+          <div class="form-header">
+            <h2>Request Review!</h2>
+            <p>
+              If you think this was a mistake you can choose to request a review
+              or <span style="color: green">contact us</span> for assistance.
+            </p>
+          </div>
+          <br />
+          <strong
+            ><i class="fas fa-robot" style="color: red"></i> Bot's
+            Overview</strong
+          >
+          <p><strong>status</strong> Profile has some Issues -</p>
+          <p>
+            <strong>Reason:</strong> User actions didn't follow our standards to
+            be considered as a valid profile-
+          </p>
+          <p>
+            <strong>Tip</strong> User should try requesting a review if it would
+            work-
+          </p>
+          <br />
+          <button id="request-review">Request Review</button>
+        </div>
+      </div>
     </section>
-    
-    
-    
-    
+
     <!-- Loader container -->
     <div class="loader-container" id="loader-container">
-        <div class="loader"></div>
-        <!---     <p>Hang on</p>--->
+      <div class="loader"></div>
+      <!---     <p>Hang on</p>--->
     </div>
-    
-    <div id="custom-alert-modal" class="modal" style="display:none">
-        <div class="modal-content">
-            <h2>Alert</h2>
-            <span class="close-button">&times;</span>
-            <br />
-            <p id="alert-message" class="modal-message"></p>
-            <button id="alert-ok-button">Got It</button>
+
+    <div id="custom-alert-modal" class="modal" style="display: none">
+      <div class="modal-content">
+        <h2>Alert</h2>
+        <span class="close-button">&times;</span>
+        <br />
+        <p id="alert-message" class="modal-message"></p>
+        <button id="alert-ok-button">Got It</button>
+      </div>
+    </div>
+
+    <div id="custom-confirm-modal" class="modal" style="display: none">
+      <div class="modal-content">
+        <h2>Alert</h2>
+        <br />
+        <p id="confirm-message" class="modal-message"></p>
+        <div class="confirm-buttons">
+          <button id="confirm-yes-button">Yes</button>
+          <button id="confirm-no-button">Not now</button>
         </div>
+      </div>
     </div>
-    
-    <div id="custom-confirm-modal" class="modal" style="display:none">
-        <div class="modal-content">
-            <h2>Alert</h2>
-            <br />
-            <p id="confirm-message" class="modal-message"></p>
-            <div class="confirm-buttons">
-                <button id="confirm-yes-button">Yes</button>
-                <button id="confirm-no-button">Not now</button>
-            </div>
-        </div>
-    </div>
-</body>
+  </body>
 
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
-<script>
-//For universal or Global scripting
-// --- DOM Elements ---
-const submitSignupBtn = document.getElementById('submit-signup');
-const usernameInput = document.getElementById('username');
-const signupForm = document.getElementById('signupForm');
-const emailInput = document.getElementById('email');
-const passwordInput = document.getElementById('password');
-const referralCodeInput = document.getElementById('referralCode');
-const usernameError = document.getElementById('usernameError');
-const resetForm = document.getElementById('resetForm');
-const emailError = document.getElementById('emailError');
-const passwordError = document.getElementById('passwordError');
-//for login Dom
-const loginEmailInput = document.getElementById('loginEmail');
-const loginPasswordInput = document.getElementById('loginPassword');
-const loginForm = document.getElementById('loginForm')
-const upgradeForm = document.getElementById("upgradeForm")
-const loginEmailError = document.getElementById('loginEmailError');
-const loginPasswordError = document.getElementById('loginPasswordError');
-const loginFormMessage = document.getElementById('loginFormMessage');
-const formMessage = document.getElementById('formMessage');
-const reviewBtn = document.querySelector("#request-review");
-const referer = document.getElementById('inviter');
-const refferalCode = document.getElementById('refferalCode');
-// Custom Alert Modal elements
-const customAlertModal = document.getElementById('custom-alert-modal');
-const alertMessage = document.getElementById('alert-message');
-const alertOkButton = document.getElementById('alert-ok-button');
-const closeAlertButton = document.querySelector('#custom-alert-modal .close-button');
-const loaderContainer = document.getElementById('loader-container');
-// Custom Confirm Modal elements
-const customConfirmModal = document.getElementById('custom-confirm-modal');
-const confirmMessage = document.getElementById('confirm-message');
-const confirmYesButton = document.getElementById('confirm-yes-button');
-const confirmNoButton = document.getElementById('confirm-no-button');
-const tabItems = document.querySelectorAll('.tab-item');
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+  <script>
+    //For universal or Global scripting
+    // --- DOM Elements ---
+    const submitSignupBtn = document.getElementById("submit-signup");
+    const usernameInput = document.getElementById("username");
+    const signupForm = document.getElementById("signupForm");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const referralCodeInput = document.getElementById("referralCode");
+    const usernameError = document.getElementById("usernameError");
+    const resetForm = document.getElementById("resetForm");
+    const emailError = document.getElementById("emailError");
+    const passwordError = document.getElementById("passwordError");
+    //for login Dom
+    const loginEmailInput = document.getElementById("loginEmail");
+    const loginPasswordInput = document.getElementById("loginPassword");
+    const loginForm = document.getElementById("loginForm");
+    const upgradeForm = document.getElementById("upgradeForm");
+    const loginEmailError = document.getElementById("loginEmailError");
+    const loginPasswordError = document.getElementById("loginPasswordError");
+    const loginFormMessage = document.getElementById("loginFormMessage");
+    const formMessage = document.getElementById("formMessage");
+    const reviewBtn = document.querySelector("#request-review");
+    const referer = document.getElementById("inviter");
+    const refferalCode = document.getElementById("refferalCode");
+    // Custom Alert Modal elements
+    const customAlertModal = document.getElementById("custom-alert-modal");
+    const alertMessage = document.getElementById("alert-message");
+    const alertOkButton = document.getElementById("alert-ok-button");
+    const closeAlertButton = document.querySelector(
+      "#custom-alert-modal .close-button",
+    );
+    const loaderContainer = document.getElementById("loader-container");
+    // Custom Confirm Modal elements
+    const customConfirmModal = document.getElementById("custom-confirm-modal");
+    const confirmMessage = document.getElementById("confirm-message");
+    const confirmYesButton = document.getElementById("confirm-yes-button");
+    const confirmNoButton = document.getElementById("confirm-no-button");
+    const tabItems = document.querySelectorAll(".tab-item");
 
-function togglePassword(password) {
-	if (password && password.type === 'text') {
-		password.type = 'password';
-		password.parentNode.querySelector('span:last-child').innerHTML = "👁️";
-	} else if (password) {
-		password.type = 'text';
-		password.parentNode.querySelector('span:last-child').innerHTML = "🙈";
-	}
-}
-//for form offline control
-document.querySelectorAll('form').forEach((form) => {
-	form.addEventListener('submit', (e) => {
-		e.preventDefault()
-	})
-})
+    function togglePassword(password) {
+      if (password && password.type === "text") {
+        password.type = "password";
+        password.parentNode.querySelector("span:last-child").innerHTML = "👁️";
+      } else if (password) {
+        password.type = "text";
+        password.parentNode.querySelector("span:last-child").innerHTML = "🙈";
+      }
+    }
+    //for form offline control
+    document.querySelectorAll("form").forEach((form) => {
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+      });
+    });
 
-// to get object params from searchlist
-const urlParams = new URLSearchParams(window.location.search);
-const tabParam = urlParams.get('tab'),
-	refParam = urlParams.get('ref');
+    // to get object params from searchlist
+    const urlParams = new URLSearchParams(window.location.search);
+    const tabParam = urlParams.get("tab"),
+      refParam = urlParams.get("ref");
 
-if (refParam && referralCodeInput) {
-	referralCodeInput.value = refParam;
-	referralCodeInput.setAttribute('disabled', true);
-	referralCodeInput.style.opacity = '.5';
-}
+    if (refParam && referralCodeInput) {
+      referralCodeInput.value = refParam;
+      referralCodeInput.setAttribute("disabled", true);
+      referralCodeInput.style.opacity = ".5";
+    }
 
-function showAlert(message, isSuccess) {
-	alertMessage.innerHTML = message;
-	customAlertModal.style.display = 'flex'; // Use flex to center
-	// FIX: Use classList.add instead of overwriting the whole className
-	customAlertModal.querySelector(".modal-content").classList.remove('text-green-600', 'text-red-600');
-	customAlertModal.querySelector(".modal-content").classList.add('text-lg', 'font-medium', 'mb-4',
-		isSuccess ? 'text-green-600' : 'text-red-600');
-	
-	if (customAlertModal.querySelector(".modal-content").classList.contains('text-red-600')) {
-		customAlertModal.querySelector(".modal-content").style.borderColor = '#FF00003B';
-	} else { customAlertModal.querySelector(".modal-content").style.borderColor = '#333'; }
-}
+    function showAlert(message, isSuccess) {
+      alertMessage.innerHTML = message;
+      customAlertModal.style.display = "flex"; // Use flex to center
+      // FIX: Use classList.add instead of overwriting the whole className
+      customAlertModal
+        .querySelector(".modal-content")
+        .classList.remove("text-green-600", "text-red-600");
+      customAlertModal
+        .querySelector(".modal-content")
+        .classList.add(
+          "text-lg",
+          "font-medium",
+          "mb-4",
+          isSuccess ? "text-green-600" : "text-red-600",
+        );
 
-function showConfirm(message, onConfirm, onCancel, btnText = "Yes") {
-	confirmMessage.innerHTML = message;
-	customConfirmModal.style.display = 'flex';
-	
-	const handleConfirm = () => {
-		customConfirmModal.style.display = 'none';
-		confirmYesButton.removeEventListener('click', handleConfirm);
-		confirmNoButton.removeEventListener('click', handleCancel);
-		onConfirm();
-	};
-	
-	const handleCancel = () => {
-		customConfirmModal.style.display = 'none';
-		confirmYesButton.removeEventListener('click', handleConfirm);
-		confirmNoButton.removeEventListener('click', handleCancel);
-		onCancel();
-	};
-	
-	confirmYesButton.textContent = btnText;
-	confirmYesButton.addEventListener('click', handleConfirm);
-	confirmNoButton.addEventListener('click', handleCancel);
-}
+      if (
+        customAlertModal
+          .querySelector(".modal-content")
+          .classList.contains("text-red-600")
+      ) {
+        customAlertModal.querySelector(".modal-content").style.borderColor =
+          "#FF00003B";
+      } else {
+        customAlertModal.querySelector(".modal-content").style.borderColor =
+          "#333";
+      }
+    }
 
-// Close alert when OK button is clicked
-alertOkButton.addEventListener('click', () => {
-	customAlertModal.style.display = 'none';
-});
+    function showConfirm(message, onConfirm, onCancel, btnText = "Yes") {
+      confirmMessage.innerHTML = message;
+      customConfirmModal.style.display = "flex";
 
-// Close alert when close button is clicked
-closeAlertButton.addEventListener('click', () => {
-	customAlertModal.style.display = 'none';
-});
+      const handleConfirm = () => {
+        customConfirmModal.style.display = "none";
+        confirmYesButton.removeEventListener("click", handleConfirm);
+        confirmNoButton.removeEventListener("click", handleCancel);
+        onConfirm();
+      };
 
+      const handleCancel = () => {
+        customConfirmModal.style.display = "none";
+        confirmYesButton.removeEventListener("click", handleConfirm);
+        confirmNoButton.removeEventListener("click", handleCancel);
+        onCancel();
+      };
 
+      confirmYesButton.textContent = btnText;
+      confirmYesButton.addEventListener("click", handleConfirm);
+      confirmNoButton.addEventListener("click", handleCancel);
+    }
 
-// Close modals if user clicks outside the modal content
-window.addEventListener('click', (event) => {
-	if (event.target === customAlertModal) {
-		customAlertModal.style.display = 'none';
-	}
-	/*
+    // Close alert when OK button is clicked
+    alertOkButton.addEventListener("click", () => {
+      customAlertModal.style.display = "none";
+    });
+
+    // Close alert when close button is clicked
+    closeAlertButton.addEventListener("click", () => {
+      customAlertModal.style.display = "none";
+    });
+
+    // Close modals if user clicks outside the modal content
+    window.addEventListener("click", (event) => {
+      if (event.target === customAlertModal) {
+        customAlertModal.style.display = "none";
+      }
+      /*
 	//for security standards 
 	if (event.target === customConfirmModal) {
 		customConfirmModal.style.display = 'none';
 	}
 	*/
-	
-});
+    });
 
-function showLoading(show) {
-	if (show) {
-		loaderContainer.style.display = 'flex';
-	} else {
-		loaderContainer.style.display = 'none';
-	}
-}
+    function showLoading(show) {
+      if (show) {
+        loaderContainer.style.display = "flex";
+      } else {
+        loaderContainer.style.display = "none";
+      }
+    }
 
-const pageContainers = document.querySelectorAll('.page');
+    const pageContainers = document.querySelectorAll(".page");
 
-/**
- * Switches the active page, handles loader, updates history, and persists state.
- * @param {string} pageId - The ID of the page container to show.
- * @param {boolean} [isPopState=false] - True if called from popstate event.
- */
-function showPage(pageId, isPopState = false) {
-	// 1. Validate the element
-	let targetPageElement = document.getElementById(pageId);
-	if (!targetPageElement) {
-		console.error(`Page "${pageId}" not found. Redirecting to fallback.`);
-		targetPageElement = document.getElementById("404Page");
-		// Fallback sequence
-	} else { targetPageElement = document.getElementById(pageId); }
-	
-	
-	showLoading(true);
-	// Simulate network delay or transition time
-	setTimeout(() => {
-		
-		// 2. Hide all pages
-		pageContainers.forEach(div => div.classList.add('hidden'));
-		
-		// 3. Show the target page
-		if (targetPageElement) {
-			targetPageElement.classList.remove('hidden');
-		}
-		
-		// 4. Persistence & Navigation UI
-		localStorage.setItem('savedTab', JSON.stringify(pageId));
-		
-		if (tabItems) {
-			tabItems.forEach(item => {
-				item.classList.toggle('active', item.dataset.tab === pageId);
-			});
-		}
-		
-		// 5. Update document title
-		const pageName = pageId.replace(/-page|Tab/g, '');
-		document.title = `Exempe - ${pageName.charAt(0).toUpperCase() + pageName.slice(1)}`;
-		
-		// 6. History Management
-		const updatedUrl = `${window.location.origin}${window.location.pathname}?tab=${pageId}`;
-		
-		if (!isPopState) {
-			window.history.pushState({ tab: pageId }, '', updatedUrl);
-		}
-		
-		showLoading(false);
-	}, 500); // Reduced delay for better UX
-}
+    /**
+     * Switches the active page, handles loader, updates history, and persists state.
+     * @param {string} pageId - The ID of the page container to show.
+     * @param {boolean} [isPopState=false] - True if called from popstate event.
+     */
+    function showPage(pageId, isPopState = false) {
+      // 1. Validate the element
+      let targetPageElement = document.getElementById(pageId);
+      if (!targetPageElement) {
+        console.error(`Page "${pageId}" not found. Redirecting to fallback.`);
+        targetPageElement = document.getElementById("404Page");
+        // Fallback sequence
+      } else {
+        targetPageElement = document.getElementById(pageId);
+      }
 
-// Tab Click Events
-tabItems.forEach(item => {
-	item.addEventListener('click', () => {
-		const activeTab = item.dataset.tab;
-		showPage(activeTab);
-	});
-});
+      showLoading(true);
+      // Simulate network delay or transition time
+      setTimeout(() => {
+        // 2. Hide all pages
+        pageContainers.forEach((div) => div.classList.add("hidden"));
 
-// Browser Back/Forward Events
-window.onpopstate = function(event) {
-	const pathPage = urlParams.get('tab') ? 'homeTab' : 'login-page';
-	showPage(pathPage, true);
-};
+        // 3. Show the target page
+        if (targetPageElement) {
+          targetPageElement.classList.remove("hidden");
+        }
 
-// Go Back Buttons
-document.querySelectorAll('.go-back').forEach((backBtn) => {
-	backBtn.addEventListener('click', () => history.back());
-});
+        // 4. Persistence & Navigation UI
+        localStorage.setItem("savedTab", JSON.stringify(pageId));
 
-//Initial Load Logic
-const savedTab = JSON.parse(localStorage.getItem("savedTab"));
-const autoPage = !tabParam ? savedTab : tabParam;
-if (autoPage) {
-	tabItems.forEach(item => {
-		item.classList.remove('active');
-		if (item.dataset.tab === autoPage) {
-			item.classList.add('active');
-		}
-	});
-}
+        if (tabItems) {
+          tabItems.forEach((item) => {
+            item.classList.toggle("active", item.dataset.tab === pageId);
+          });
+        }
 
-// Determine the starting page: URL -> LocalStorage -> Default
-const initialPage = tabParam || savedTab || '404Page';
+        // 5. Update document title
+        const pageName = pageId.replace(/-page|Tab/g, "");
+        document.title = `Exempe - ${pageName.charAt(0).toUpperCase() + pageName.slice(1)}`;
 
-// Run the initial page setup
-showPage(initialPage, true);
-//showPage("welcome-page")
-</script>
-<script type="module" src="script-002.js"></script>
+        // 6. History Management
+        const updatedUrl = `${window.location.origin}${window.location.pathname}?tab=${pageId}`;
 
+        if (!isPopState) {
+          window.history.pushState({ tab: pageId }, "", updatedUrl);
+        }
+
+        showLoading(false);
+      }, 500); // Reduced delay for better UX
+    }
+
+    // Tab Click Events
+    tabItems.forEach((item) => {
+      item.addEventListener("click", () => {
+        const activeTab = item.dataset.tab;
+        showPage(activeTab);
+      });
+    });
+
+    // Browser Back/Forward Events
+    window.onpopstate = function (event) {
+      const pathPage = urlParams.get("tab") ? "homeTab" : "login-page";
+      showPage(pathPage, true);
+    };
+
+    // Go Back Buttons
+    document.querySelectorAll(".go-back").forEach((backBtn) => {
+      backBtn.addEventListener("click", () => history.back());
+    });
+
+    //Initial Load Logic
+    const savedTab = JSON.parse(localStorage.getItem("savedTab"));
+    const autoPage = !tabParam ? savedTab : tabParam;
+    if (autoPage) {
+      tabItems.forEach((item) => {
+        item.classList.remove("active");
+        if (item.dataset.tab === autoPage) {
+          item.classList.add("active");
+        }
+      });
+    }
+
+    // Determine the starting page: URL -> LocalStorage -> Default
+    const initialPage = tabParam || savedTab || "404Page";
+
+    // Run the initial page setup
+    showPage(initialPage, true);
+    //showPage("welcome-page")
+  </script>
+  <script type="module" src="script-002.js"></script>
 </html>
