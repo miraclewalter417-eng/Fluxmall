@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="account.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
@@ -19,6 +20,7 @@
             <span>You were invited by <b id="referrerName" style="color: var(--primary);">...</b></span>
         </div>
     </div>
+    
     <section class="page"></section>
     <section class="page hidden" id="404Page">
         <div class="error-container">
@@ -85,7 +87,7 @@
             <div class="info-side">
                 <div class="brand-logo">
                     <img width="35" class="logo-img" height="35" src="/img/logo.png" alt="logo" />
-                    <h1 class="site-name">Flash sales</h1>
+                    <h1 class="site-name">Flux mall</h1>
                 </div>
             </div>
             
@@ -97,7 +99,7 @@
                 
                 <form class="signup-form" id="loginForm">
                     <div class="input-group">
-                        <label for="login-email">Registered Email: <span>*</span></label>
+                        <label for="login-email">Registered Email: <span><i class="fa-solid fa-envelope"></i></span></label>
                         <div class="input-wrapper">
                             <i class="fas fa-envelope input-icon"></i>
                             <input type="email" id="loginEmail" name="login-email" placeholder="Enter your Email" required>
@@ -184,7 +186,7 @@
             <div class="info-side">
                 <div class="brand-logo">
                     <img width="35" class="logo-img" height="35" src="/img/logo.png" alt="logo" />
-                    <h1 class="site-name">Flash sales</h1>
+                    <h1 class="site-name">Flux mall</h1>
                 </div>
             </div>
             
@@ -195,7 +197,7 @@
                 </div>
                 <form id="signupForm" class="signup-form">
                     <div class="input-group">
-                        <label for="username">Username: <span>*</span></label>
+                        <label for="username">Username: <span><i class="fa-solid fa-envelope"></i></span></label>
                         <div class="input-wrapper">
                             <i class="fas fa-user input-icon"></i>
                             <input type="text" id="username" name="username" placeholder="E.g Carlos brown" required>
@@ -203,7 +205,7 @@
                         <p id="usernameError" class="error-message"></p>
                     </div>
                     <div class="input-group">
-                        <label for="signup-email">Email: <span>*</span></label>
+                        <label for="signup-email">Email: <span></span></label>
                         <div class="input-wrapper">
                             <i class="fas fa-envelope input-icon"></i>
                             <input type="email" id="email" name="signup-email" placeholder="Enter your Email" required>
@@ -212,7 +214,7 @@
                     </div>
                     
                     <div class="input-group">
-                        <label for="signup-password">Password: <span>*</span></label>
+                        <label for="signup-password">Password: <span></span></label>
                         <div class="input-wrapper">
                             <span class="input-icon">🔒</span>
                             <input type="password" id="password" name="signup-password" placeholder="Enter Password" required>
