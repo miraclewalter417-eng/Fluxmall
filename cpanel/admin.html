@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title> Admin cpanel</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="shortcut icon" href="images/logo.png" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel='stylesheet'>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Space+Grotesk:wght@500..700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="admin-wrapper">
+        <aside class="sidebar">
+            <div class="logo">FLUX MALL ADMIN PANEL</div>
+            <nav>
+                <div class="nav-item active" onclick="showTab('analytics-tab', this)">
+                    <i class="ri-bubble-chart-line"></i> <span>Analytics</span>
+                </div>
+                <div class="nav-item" onclick="showTab('deposits-tab', this)">
+                    <i class="ri-coins-fill"></i> <span>Transactions</span>
+                </div>
+                <div class="nav-item" onclick="showTab('users-tab', this)">
+                    <i class="ri-p2p-line"></i> <span>Management</span>
+                </div>
+                <div class="nav-item" onclick="showTab('settings-tab', this)">
+                    <i class="ri-draggable"></i> <span>Settings</span>
+                </div>
+            </nav>
+        </aside>
+
+        <div class="login-container tab-content" id="login"><br /><br />
+            <div style="margin: 0 auto; max-width: 400px;">
+                <div class="bio-icon">
+                    <i class="ri-fingerprint-line"></i>
+                </div>
+                <h2>Admin access Portal</h2>
+                <p>Secure Biometric Access Required</p>
+                <form onsubmit="handleAdminLogin(event)">
+                    <div class="input-group">
+                        <label>Master Email</label>
+                        <input type="email" id="adminEmail" required placeholder="admin@yoursite.com">
+                    </div>
+                    <div class="input-group">
+                        <label>Master Password</label>
+                        <input type="password" id="adminPass" required placeholder="••••••••">
+                    </div>
+
+                    <button type="submit" id="loginBtn">Verify Identity</button>
+                </form>
+            </div>
+        </div>
+
+
+        <main class="main-content">
+            <div class="theme-control">
+                <span class="theme-dot" onclick="setTheme('light', this)"><i class="ri-sun-line"></i></span>
+                <span class="theme-dot" onclick="setTheme('dark', this)"><i class="ri-moon-line"></i></span>
+                <span class="theme-dot" onclick="setTheme('blue', this)"><i class="ri-moon-clear-line"></i></span>
+            </div>
+
+            <section id="analytics-tab" class="tab-content active">
+                <div class="header-row">
+                    <button class="btn-export" onclick="exportCSV()">Export CSV <i  class="ri-arrow-right-up-fill"></i></button>
+                    <h2>System Analytics</h2>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card"> <i class="ri-exchange-funds-line"></i>
+                        <h3>Total Success</h3>
+                        <p>
+                            <span id="statTotal" style="color:var(--success)">₦0.00</span>
+                        </p>
+                    </div>
+                    <div class="stat-card"> <i class="ri-exchange-line"></i>
+                        <h3>Pending Volume</h3>
+                        <p>
+                            <span id="statPending" style="color:#E65C08;">₦0.00</span>
+                        </p>
+                    </div>
+                    <div class="stat-card"> <i class="ri-group-line"></i>
+                        <h3>Active Users</h3>
+                        <p>
+                            <span id="statUsers">0</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <h3 style="margin-bottom: 20px;">Transaction Health</h3>
+                        <canvas id="pieChart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Money Flow (In vs Out)</h3>
+                        <canvas id="barChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <h3 style="padding: 20px 10px 5px;">Summary by Status</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th></th>
+                                <th>Count</th>
+                                <th>Volume</th>
+                            </tr>
+                        </thead>
+                        <tbody id="analyticsTableBody">
+                            <tr>
+                                <td colspan='6'>Syncing Database...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="deposits-tab" class="tab-content">
+                <div class="header-row">
+                    <h2>Deposit Requests</h2>
+                    <div style="display:flex; gap:10px;justify-content: center;align-items: center;">
+                        <div class="search-box">
+                            <i class="ri-search-line" style="font-size: 20px;margin:0 8px 0 10px;"></i>
+                            <input type="text" id="adminSearch" placeholder="User ID or Ref..."
+                                onkeyup="filterDeposits()">
+                        </div>
+                        <button class="btn-export" onclick="showTab('withdrawals-tab', this)">Withdrawals<i
+                                class="ri-arrow-right-up-fill"></i></button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>User</th>
+                                <th>Amount</th>
+                                <th>Ref</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="depositTableBody">
+                            <tr>
+                                <td colspan='6'>Syncing Database...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="withdrawals-tab" class="tab-content">
+                <div class="header-row">
+                    <h3>Withdrawal Requests</h3>
+                </div>
+
+                <div style="display: flex; justify-content: space-between;align-items: center;">
+                    <button class="btn-export" onclick="showTab('deposits-tab', this)">Deposits<i
+                            class="ri-arrow-right-down-fill"></i></button>
+                    <div class="btn-export"
+                        style="display:flex;align-items: center;gap:10px;font-size: 18px; padding: 0 10px 0 0;background:var(--card);color: var(--text-main)">
+                        <select id="wdSortOrder" onchange="changeWdSort()"
+                            style="background: var(--bg); color: var(--text-main); border:2px solid var(--border); padding: 8px 10px; border-radius: 8px; cursor: pointer;">
+                            <option value="createdAt-desc">Newest First</option>
+                            <option value="createdAt-asc">Oldest First</option>
+                            <option value="amount-desc">Highest Amount</option>
+                            <option value="amount-asc">Lowest Amount</option>
+                            <option value="status-asc">By Status (A-Z)</option>
+                        </select>
+                        <i class="ri-arrow-right-up-line" onclick="openWithdrawSettings()"></i>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>Name</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="withdrawTable">
+                            <tr>
+                                <td colspan='6'>Nothing here to see.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+
+            <section id="users-tab" class="tab-content">
+                <div class="header-row">
+                    <button class="btn-export" onclick="openCreateUserModal()">Create user<i
+                            class="ri-add-line"></i></button>
+                    <h2>User Management</h2>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>Total Deposits</th>
+                                <th>Total Paid(₦)</th>
+                                <th>Disabled</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="userTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="settings-tab" class="tab-content">
+                <div class="header-row">
+                    <h2>Settings</h2>
+                    <div style="display:flex; gap:10px;justify-content: center;align-items: center;">
+                        <div class="search-box">
+                            <button class="btn-export" onclick="resetBrandingSecure()" id="resetBrandingBtn">Reset
+                                default<i class="ri-arrow-right-up-fill"></i></button>
+                        </div>
+
+                        <div style="display: flex; font-size: 18pt;gap: 15px;cursor: pointer;">
+                            <i style="color:green;background: none;" onclick="openBindBankModal()"
+                                class="ri-visa-fill"></i>
+                            <i style="color:green;background: none;" onclick="openCreateNewsModal()"
+                                class="ri-megaphone-line"></i>
+                            <i style="color:red;background: none;" onclick="logoutAdmin()"
+                                class="ri-logout-box-line"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="settings">
+                    <div>
+                        <div class="form-container">
+                            <form id="rulesForm">
+
+                                <section
+                                    style="overflow: hidden;margin:6px 0;background-color: var(--bg);padding: 8px 15px;border-radius: 12px;">
+
+                                    <h3
+                                        style="display: flex; justify-content: space-between; font-size: 14pt;margin:8px 0 10px 0;">
+                                        <span style="font-weight: bold;">Branding</span>
+                                        <i class="ri-add-fill"
+                                            onclick="document.getElementById('logoFileInput').click()"></i>
+                                    </h3>
+
+                                    <input type="file" id="logoFileInput" accept="image/*" onchange="previewLogo(this)"
+                                        hidden>
+                                    <div id="logoPreviewContainer"
+                                        style="margin: 10px 0 18px 0;display: flex;  width: 100%;">
+                                        <img id="logoPreview" src=""
+                                            style="border-radius: 45%;height: 80px; width: 80px;margin: 0 auto;">
+                                    </div>
+
+                                    <div class="input-group">
+                                        <label>Site Name</label>
+                                        <input type="text" id="siteNameInput" placeholder="e.g. Flash Sales Pro"
+                                            required>
+                                    </div>
+                                    <div class="input-group"><label>Site description</label><textarea rows="5"
+                                            id="descText" required></textarea>
+                                    </div>
+                                </section>
+                                <details
+                                    style="margin:6px 0;background-color: var(--bg);padding: 8px 15px;border-radius: 12px;">
+
+                                    <summary
+                                        style="display: flex; justify-content: space-between; font-size: 12pt;margin:8px 0 10px 0;">
+                                        <span style="font-weight: bold;">User Appearance</span>
+                                    </summary>
+
+                                    <div style="margin-top: 15px;">
+                                        <p style="font-size: 12px; color: var(--text-sub); margin-bottom: 10px;">Quick
+                                            Presets (Click to Apply)</p>
+
+                                        <div class="preset-grid">
+
+                                            <div onclick="applyPreset('light', '#4318FF', '#6AD2FF')"
+                                                class="preset-card"
+                                                style="background: #f4f7fe; border: 1px solid #ddd;">
+                                                <div style="height: 20px; background: #4318FF; width: 100%;"></div>
+                                                <span>Classic Blue</span>
+                                            </div>
+
+                                            <div onclick="applyPreset('dark', '#705df2', '#ff4757')" class="preset-card"
+                                                style="background: #0b1437; color: white;">
+                                                <div style="height: 20px; background: #705df2; width: 100%;"></div>
+                                                <span>Midnight Pro</span>
+                                            </div>
+
+                                            <div onclick="applyPreset('dark', '#FFD700', '#DAA520')" class="preset-card"
+                                                style="background: #000000; color: #FFD700; border: 1px solid #333;">
+                                                <div style="height: 20px; background: #FFD700; width: 100%;"></div>
+                                                <span>Royal Gold</span>
+                                            </div>
+
+                                            <div onclick="applyPreset('light', '#00b894', '#55efc4')"
+                                                class="preset-card" style="background: #fff; border: 1px solid #ddd;">
+                                                <div style="height: 20px; background: #00b894; width: 100%;"></div>
+                                                <span>Forest Wealth</span>
+                                            </div>
+
+                                            <div onclick="applyPreset('dark', '#ff6b6b', '#ff9f43')" class="preset-card"
+                                                style="background: #2d3436; color: white;">
+                                                <div style="height: 20px; background: #ff6b6b; width: 100%;"></div>
+                                                <span>Sunset Fire</span>
+                                            </div>
+
+                                            <div onclick="applyPreset('light', '#2d3436', '#636e72')"
+                                                class="preset-card"
+                                                style="background: #dfe6e9; border: 1px solid #ddd;">
+                                                <div style="height: 20px; background: #2d3436; width: 100%;"></div>
+                                                <span>Corporate</span>
+                                            </div>
+                                        </div>
+
+                                        <hr style="opacity: 0.2; margin: 15px 0;">
+
+                                        <div style="display: flex; gap: 15px; margin-top: 10px;">
+                                            <div style="width: 80%;">
+                                                <label>Theme Mode</label>
+                                                <select id="themeMode" onchange="saveThemeConfig()">
+                                                    <option value="light">☀️ Light Mode</option>
+                                                    <option value="dark">🌙 Dark Mode</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label style="font-size:12px;">Primary</label><br>
+                                                <input type="color" id="primaryColor" onchange="saveThemeConfig()"
+                                                    style="width: 40px; height:40px; border: none; cursor: pointer;border-radius: 50%;">
+                                            </div>
+                                            <div>
+                                                <label style="font-size:12px;">Secondary</label><br>
+                                                <input type="color" id="secondaryColor" onchange="saveThemeConfig()"
+                                                    style="width: 40px; height: 40px;border-radius: 50%; border: none; cursor: pointer;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </details>
+
+                                <details
+                                    style="margin:6px 0;background-color: var(--bg);padding: 8px 15px;border-radius: 12px;">
+
+                                    <summary
+                                        style="display: flex; justify-content: space-between; font-size: 12pt;margin:8px 0 10px 0;">
+                                        <span style="font-weight: bold;">Social Links</span>
+                                    </summary>
+
+                                    <div class="input-group"><label>WhatsApp Link</label><input type="url" id="waLink"
+                                            required>
+                                    </div>
+                                    <div class="input-group"><label>Telegram Link</label><input type="url" id="tgLink"
+                                            required>
+                                    </div>
+                                </details>
+
+                                <details
+                                    style="margin: 6px 0;background-color: var(--bg);padding: 8px 15px;border-radius: 12px;">
+
+                                    <summary
+                                        style="display: flex; justify-content: space-between; font-size: 12pt;margin:8px 0 10px 0;">
+                                        <span style="font-weight: bold;">Points Allocation</span>
+                                    </summary>
+
+                                    <div class="input-group"><label>Inital User Balance</label><input type="number"
+                                            id="initBal" required></div>
+                                    <div class="input-group"><label>Sign in commission</label>
+                                        <input type="number" id="signinAmt">
+                                    </div>
+
+                                    <div class="input-group" style="display:flex;gap: 5px;"><label>Referral
+                                            Bonus</label><br />
+                                        <input type="number" id="ref1" placeholder="1st %">
+                                        <input type="number" id="ref2" placeholder="2nd %">
+                                        <input type="number" id="ref3" placeholder="3rd %">
+                                    </div>
+                                </details>
+                                <br />
+
+                                <button type="submit" class="btn-submit">Configure</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div>
+                            <div class="form-container">
+                                <h3>Utilities</h3>
+                                <br />
+                                <details id="activePresetsContainer"
+                                    style="margin: 6px 0;background-color: var(--bg);padding: 8px 15px;border-radius: 12px;">
+                                    <summary
+                                        style="display: flex; justify-content: space-between; font-size: 12pt;margin:8px 0 10px 0;">
+                                        <span style="font-weight: bold;">Active Deposits</span><i
+                                            onclick="openAddDepositAmtModal()" class="ri-add-fill"></i>
+                                    </summary>
+
+                                    <div id="presetsList"
+                                        style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px;">
+                                    </div>
+                                </details>
+
+                                <details
+                                    style="margin: 6px 0;background-color: var(--bg);padding: 8px 0;border-radius: 12px;">
+
+                                    <summary
+                                        style="display: flex; justify-content: space-between; font-size: 12pt;margin:8px 10px;">
+                                        <span style="font-weight: bold;">Active Shares</span>
+                                        <i onclick="openCreateSharesModal()" class="ri-add-fill"></i>
+                                    </summary>
+
+                                    <div class="table-container">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th></th>
+                                                    <th>Price</th>
+                                                    <th>Daily</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="shareListTable">
+                                                <tr>
+                                                    <td colspan='6'>Syncing Database...</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </details>
+
+                            </div>
+                        </div>
+
+                        <br>
+                        <div>
+                            <div class="form-container">
+                                <h3> Maintenance</h3>
+                                <div style="display:flex; justify-content:space-between; align-items:center;">
+                                    <p style="font-size:0.75rem; opacity:0.7; margin-top:10px;">Lock users due to
+                                        changes or
+                                        upgrades in site.</p>
+
+                                    <label class="switch">
+                                        <input type="checkbox" id="maintenanceToggle">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="form-container" style="border:1px solid var(--danger);">
+                                <h3> Future kit upgrade</h3>
+                                <div style="display:flex; justify-content:space-between; align-items:center;">
+                                    <p style="font-size:0.75rem; opacity:0.7; margin-top:10px;">Get support kits from
+                                        developer for future upgrades.</p>
+
+                                    <label class="switch">
+                                        <input type="checkbox" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="script.js" type="module"></script>
+</body>
+
+
+</html>
