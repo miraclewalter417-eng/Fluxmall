@@ -58,7 +58,7 @@ const limiter = rateLimit({
 // Apply the limit to all requests
 app.use(limiter);
 
-const cors = require('cors');
+const cors = require("cors");
 app.use(cors()); // This allows your frontend to talk to your backend
 
 require("dotenv").config();

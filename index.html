@@ -1,707 +1,942 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Flash Sales | Setting Standards</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel='stylesheet'>
-    
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://korablobstorage.blob.core.windows.net/modal-bucket/korapay-collections.min.js"></script>
-</head>
+  </head>
 
-<body>
+  <body>
     <div id="loader-container">
-        <div class="loader"></div>
+      <div class="loader"></div>
     </div>
-    <div class="notifications"> </div>
-    
+    <div class="notifications"></div>
+
     <div class="app-container">
-        <header class="header">
-            <div style="display: flex; justify-content: space-between;margin: 2px 15px;"> <span class="brand-name site-name">Flux
-                    mall</span>
-                <div class="header-right">
-                    <h5 style="color:#918e8e" class="userId">ID: </h5>
-                    <a href="#me" data-lucide="circle-user" class="text-teal"></a>
-                </div>
-            </div>
-            
-            <div id="ticker-wrapper" class="ticker-wrapper"><i style="background: var(--primary);position: absolute;z-index: 20;margin-top: -2px; padding:0 2px 0 5px; font-size: 12pt;border-right: 1px solid #f4f4f4;" class="ri-megaphone-line"></i>
-                <p id="tickerTex" class="ticker-text">No Announcement</p>
-            </div>
-        </header>
-        <main class="content" id="home">
-            <section class="profile-card">
-                <div class="profile-info">
-                    <div class="avatar-box">
-                        <img class="logo-img" alt="Logo">
-                    </div>
-                    <div class="user-details">
-                        <h2>Hello, <span class="userName"></span></h2>
-                        <div class="level-badge">
-                            <strong class="lvl-label email" style="font-size: 10px;"></strong>
-                        </div>
-                    </div>
-                    <div class="verified-status">
-                        <i data-lucide="check-circle-2"></i> Active
-                    </div>
-                </div>
-            </section>
-            
-            <div class="action-card">
-                <div class="card-left">
-                    <div class="icon-box yellow-bg">
-                        <i data-lucide="gift"></i>
-                    </div>
-                    <div class="card-text">
-                        <h3>Daily Check-in</h3>
-                        <p id="checkinMsg" style="font-size: 0.7rem;"></p>
-                    </div>
-                </div>
-                <div class="card-right">
-                    <button class="btn-secondary" id="checkinBtn" onclick="handleDailyCheckIn()">Check in <i data-lucide="chevron-down" size="14"></i></button>
-                </div>
-            </div>
-            <a class="action-card">
-                <div class="card-left">
-                    <div class="icon-box orange-bg-dim">
-                        <i data-lucide="ferris-wheel" class="text-teal"></i>
-                    </div>
-                    <div class="card-text">
-                        <h3>Spin Wheel</h3>
-                        <p>Refer 10 people to earn spin rewards</p>
-                    </div>
-                </div>
-                <i data-lucide="chevron-right" class="text-muted"></i>
-            </a>
-            <br>
-            <div class="section-title" style="margin-bottom: 0;">
-                <i data-lucide="flame" class="text-yellow"></i> Available Sharess
-            </div>
-            <section id="shares-container" class="tasks-section">
-                <div class="empty-state">
-                    <div class="fox-logo-placeholder">🔮</div>
-                    <p>No available share</p>
-                </div>
-            </section>
-        </main>
-        <main class="content hidden" id="guide">
-            <h2 class="main-heading">Platform Guide</h2>
-            <br />
-            <div class="guide">
-                <img class="logo-img" alt="" />
-                <code>
-                    <p id="siteAbout">Built on trust</p>
-                    
-                </code>
-            </div>
-        </main>
-        <main class="content hidden" id="withdraw">
-            <h2 class="main-heading"><i data-lucide="chevron-left" class="text-orange" onclick="history.back()" style="cursor: pointer;"></i> Account Withdrawal</h2>
-            <a href="#withdrawals" style="float:right;color: #677281; "><span data-lucide="history"></span></a>
-            <p class="sub-heading">Withdraw funds to your Fiat wallet</p>
-            
-            <details>
-                <summary class="section-title" style="font-size: 14px; border: 1px solid green; border-radius: 5px; cursor: pointer; justify-content: center; align-items: center; background-color: red;">
-                    <i data-lucide="flame" class="text-yellow"></i>Bind Bank Account Details <i class="ri-arrow-right-up-fill text-teal"></i>
-                </summary>
-                <div class="action-card block">
-                    <div class="section-title">
-                        <i data-lucide="corner-left-down" class="text-yellow"></i><span id="status-msg">Please make sure
-                            to add your accurate bank details!
-                        </span>
-                    </div>
-                    
-                    <div class="form-body">
-                        <div class="input-wrapper">
-                            <label class="section-title" style="margin: 0;">Bank Name:</label>
-                            <input type="text" id="bankName" placeholder="e.g. Kuda Bank">
-                        </div>
-                        
-                        <div class="input-wrapper">
-                            <label class="section-title" style="margin:0">Account Number:</label>
-                            <input type=" number" id="accNumber" placeholder="10-digit number">
-                        </div>
-                        
-                        <div class="input-wrapper">
-                            <label class="section-title" style="margin: 0">Account Name:</label>
-                            <input type="text" id="accName" placeholder="Full Name on Account">
-                        </div>
-                        
-                        <button id="saveBtn" class="share-btn" onclick="handleSave()">
-                            Save Details
-                        </button>
-                    </div>
-                </div>
-            </details>
-            
-            <div class="withdraw-form">
-                <label class="section-title">Amount to Withdraw</label>
-                
-                <div class="input-wrapper">
-                    <input type="number" id="withdrawAmount" placeholder="Min: ₦--" oninput="updateWithdrawPreview()">
-                </div>
-                
-                <div class="preview-box">
-                    <div class="prev-row">
-                        <span>Service Fee:</span>
-                        <span id="displayFee">₦0</span>
-                    </div>
-                    <div class="prev-row total">
-                        <span>You will receive:</span>
-                        <span id="netAmount">₦0.00</span>
-                    </div>
-                </div>
-                
-                <button id="withdrawBtn" onclick="handleWithdrawalSubmit()" class="share-btn" style="margin:0 auto; width:95%; background-color: var(--orange);border-radius: 6px;">Confirm
-                    withdrawal</button>
-            </div>
-            <div class="action-card block">
-                <h4 style="color: var(--primary); text-align: center;">Important Notice</h4>
-                <ul class="step-list">
-                    <li class="step-item">
-                        <div class="step-num">1</div>
-                        <div class="step-desc" id="minLimitTxt">Minimum widthrawal: --.</div>
-                    </li>
-                    <li class="step-item">
-                        <div class="step-num">2</div>
-                        <div class="step-desc">Withdrawal can take a processing time of 30mins - 1hr due to high payout volume.</div>
-                    </li>
-                    <li class="step-item">
-                        <div class="step-num">3</div>
-                        <div class="step-desc">Ensure the bonded bank details are accurate.</div>
-                    </li>
-                    <li class="step-item">
-                        <div class="step-num">4</div>
-                        <div class="step-desc">Withdrawal time 9am - 6am daily.</div>
-                    </li>
-                </ul>
-            </div>
-        </main>
-        
-        <main class="content hidden" id="recharge">
-            <h2 class="main-heading"> <i data-lucide="chevron-left" class="text-orange" onclick="history.back()" style="cursor: pointer;"></i> Recharge Account</h2>
-            <a href="#deposits" style="float:right;color: #677281; "><span data-lucide="history"></span></a>
-            <p class="sub-heading">Deposit funds into your account</p>
-            <form>
-                
-                <div class="section-title">
-                    <i data-lucide="flame" class="text-teal"></i>Quick select
-                </div>
-                <div class="amount-grid" id="amountGrid">
-                    <button class="amt-btn active" data-value="3000">₦3,000</button>
-                </div>
-                
-                <div class="custom-input">
-                    <div class="input-wrapper">
-                        <span>₦</span>
-                        <input type="number" id="customAmount" value="3000" readonly>
-                    </div>
-                    <label for="attest"><input type="checkbox" id="attest" required>
-                        I attest that I've read and understood the notice below</label>
-                </div>
-                
-                <button id="rechargeBtn" class="share-btn" style="margin:0 auto; width:95%; background-color: var(--orange);border-radius: 6px;" type="submit">Recharge Now</button>
-            </form>
-            <br>
-            <div class="action-card block">
-                <h4 style="color: var(--primary); text-align: center;">Important Notice</h4>
-                <ul class="step-list">
-                    <li class="step-item">
-                        <div class="step-num">1</div>
-                        <div class="step-desc">Amounts less than the minimum threshold
-                            will not be credited.</div>
-                    </li>
-                    <li class="step-item">
-                        <div class="step-num">2</div>
-                        <div class="step-desc">Copy the correct Reference Code and paste in your bank transaction
-                            narration else your deposit will be void.</div>
-                    </li>
-                    <li class="step-item">
-                        <div class="step-num">3</div>
-                        <div class="step-desc">Copy the correct account number for fast confirmation, Payments approvals
-                            takes approximately 1~2mins.</div>
-                    </li>
-                    <li class="step-item">
-                        <div class="step-num">4</div>
-                        <div class="step-desc">All payments must be done on the platform, not to any third party agents.
-                        </div>
-                    </li>
-                    <li class="step-item">
-                        <div class="step-num">5</div>
-                        <div class="step-desc">Always remain on site during payments and do not refresh the site untill payments processed completely.
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </main>
-        
-        <main class="content hidden" id="deposits">
-            <h2 class="main-heading"><i data-lucide="chevron-left" class="text-orange" onclick="history.back()" style="cursor: pointer;"></i> Deposit history</h2>
-            <p class="sub-heading">Manage All your deposits here.</p>
-            <section id="depositList"></section>
-        </main>
-        
-        <main class="content hidden" id="withdrawals">
-            <h2 class="main-heading"><i data-lucide="chevron-left" class="text-orange" onclick="history.back()" style="cursor: pointer;"></i> Withdrawal history</h2>
-            <p class="sub-heading">Manage All your withdrawals here.</p>
-            <section id="withdrawList"></section>
-        </main>
-        
-        
-        <main class="content hidden" id="leaderboard">
-            <h2 class="main-heading">Leaderboard</h2>
-            <p class="sub-heading">Manage Referals inline with your Rank.</p>
-            
-            <div class="team-container">
-                <div class="reward-banner">
-                    <div>
-                        <div style="font-size: 20px; font-weight: bold;" id="totalTeam">0.00</div>
-                        <div style="font-size: 12px;">Team Size</div>
-                    </div>
-                    <div style="border-left: 1px solid rgba(255,255,255,0.3);"></div>
-                    <div>
-                        <div style="font-size: 20px; font-weight: bold;" id="totalEarnings">0.00</div>
-                        <div style="font-size: 12px;">Invite Reward</div>
-                    </div>
-                </div>
-                <div class="action-car block">
-                    <h4 style="color: var(--primary); text-align: center;">Event Rules</h4>
-                    <ul class="step-list">
-                        <li class="step-item">
-                            <div class="step-num">1</div>
-                            <div class="step-desc">Click 'Copy' button to copy the link or select other sharing methods.
-                            </div>
-                        </li>
-                        <li class="step-item">
-                            <div class="step-num">2</div>
-                            <div class="step-desc">Share the link with friends and ensure they register using your
-                                shared
-                                link.</div>
-                        </li>
-                        <li class="step-item">
-                            <div class="step-num">3</div>
-                            <div class="step-desc">After friends register and complete tasks, you receive additional
-                                commissions and increased rank.</div>
-                        </li>
-                    </ul>
-                </div>
-                
-                <div class="level-tabs">
-                    <div class="level-card">
-                        <h4>Level 1 (<span id="ref1"></span>%)</h4>
-                        <p><span id="countL1">0</span> Members</p>
-                    </div>
-                    <div class="level-card">
-                        <h4>Level 2 (<span id="ref2"></span>%)</h4>
-                        <p><span id="countL2">0</span> Members</p>
-                    </div>
-                    <div class="level-card">
-                        <h4>Level 3 (<span id="ref3"></span>%)</h4>
-                        <p><span id="countL3">0</span> Members</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="referral-car action-card block">
-                <div class="icon-box-orange"><i data-lucide="users"></i></div>
-                <h3>Invite Your Friends</h3>
-                <p>Earn from your friend's first deposit!</p>
-                
-                <div class="referral-box">
-                    <input type="text" id="referralURL" readonly>
-                    <button onclick="copyReferralLink()" id="copyBtn" class="copy-btn">
-                        <i class="ri-file-copy-line"></i></button>
-                </div>
-                
-                <button class="whatsapp-share-btn" onclick="shareOnWhatsApp()">
-                    <i class="ri-whatsapp-line" style="font-size: 16px;"></i> Share on WhatsApp
-                </button>
-                <div style="display: none;width: 100%;margin: 10px 0 0 0;gap: 10px;">
-                    <div class="share-btn tg">
-                        <i class="fa-brands fa-telegram"></i>
-                        <span>Telegram</span>
-                    </div>
-                    <div class="share-btn fb">
-                        <i class="fa-brands fa-facebook"></i>
-                        <span>Facebook</span>
-                    </div>
-                </div>
-            </div>
-            
-            <br />
-            <div class="tab-container">
-                <button class="tab hidden"><i data-lucide="users" size="16"></i> Invites</button>
-                <button class="tab active"><i data-lucide="trophy" size="16"></i> Rank</button>
-            </div>
-            
-            <div class="leader-list hidde">
-                <div class="section-title">
-                    <i data-lucide="corner-left-down" class="text-orange"></i>
-                    <p class="text-teal" style="text-align: center;">Only the 3 Top members are shown in the
-                        list below.</p>
-                </div>
-                <div class="leader-item">
-                    <div class="medal silver">🏆</div>
-                    <i data-lucide="user-round" class="avatar"></i>
-                    <div class="leader-info">
-                        <span class="name">Bensonexchange</span>
-                        <span class="sub text-yellow">Lvl. 6 completed</span>
-                    </div>
-                    <i data-lucide="move-up-right" class="text-teal"></i>
-                </div>
-                <div class="leader-item">
-                    <div class="medal gold">🥇</div>
-                    <i data-lucide="user-round" class="avatar"></i>
-                    <div class="leader-info">
-                        <span class="name">ayungpwi</span>
-                        <span class="sub text-yellow">Lvl. 5 completed</span>
-                    </div>
-                    <i data-lucide="move-down-left" class="text-orange"></i>
-                </div>
-                <div class="leader-item">
-                    <div class="medal silver">🥈</div>
-                    <i data-lucide="user-round" class="avatar"></i>
-                    <div class="leader-info">
-                        <span class="name">GladyzGodspower</span>
-                        <span class="sub text-yellow">Lvl. 5 completed</span>
-                    </div>
-                    <i data-lucide="move-down-left" class="text-orange"></i>
-                </div>
-            </div>
-        </main>
-        
-        <main class="content hidden" style="position: relative;padding-top: 0;" id="futures">
-            <div style="  background: var(--primary-gradient);
-            padding: 30px 20px 60px 20px;
-            border-bottom-left-radius: 30px;color:#fff;
-            border-bottom-right-radius: 30px;">
-                <h2 style="font-size: 24px;
-            font-weight: 700;">My Orders</h2>
-            </div>
-            
-            <div id="myInvestmentsContainer" class="active-orders">
-                <div class="empty-state">
-                    <div class="fox-logo-placeholder">🔮</div>
-                    <p>You haven't purchased any possible Future yet</p>
-                </div>
-            </div>
-        </main>
-        
-        <main id="history" class="content hidden">
-            <div class="history-section">
-                <div class="history-header" style="width: 100%;display: flex;justify-content: space-between;">
-                    <h4>Recent Activity</h4>
-                    <a style="float:right;color: #677281;" onclick="fetchUserHistory()"><span data-lucide="refresh-cw"></span></a>
-                </div>
-                <div id="historyList" class="history-list">
-                </div>
-            </div>
-        </main>
-        
-        <main id="service" class="content hidden" style="position: relative;padding-top: 0;">
-            <div style="  background: var(--primary-gradient);
-            padding: 30px 20px 60px 20px;
-            border-bottom-left-radius: 30px;
-            border-bottom-right-radius: 30px;color: #fff;">
-                <h2 style="font-size: 24px;
-            font-weight: 700;">Customer Service</h2>
-            </div>
-            
-            <div class="active-orders">
-                <div class="order-card" style="
-            color: var(--text-main);
+      <header class="header">
+        <div
+          style="
             display: flex;
             justify-content: space-between;
-            align-items: center;width: 100%;
-            margin-top: -20px;padding:20px  10px;">
-                    <div style="display: flex; align-items: center;">
-                        <div class="avatar status-badge" style="width: 40px; height: 40px; margin-right: 10px; background: rgba(255,255,255,0.2); width:45px;
-            height: 45px;
-            border-radius: 50%;
-            margin-right: 10px;font-weight:500;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            ">
-                            <i class="ri-customer-service-2-line "></i>
-                        </div>
-                        <div>
-                            <div style="font-weight: bold;" class="status-badge">Online Service</div>
-                            <div style="font-size: 12px;">24/7 Available Now</div>
-                        </div>
-                    </div>
-                    <button style="background: var(--success); color: white;" class="btn btn-secondar">Contact<i class="ri-flashlight-fill" style="color:#f1c40f"></i></button>
-                </div>
-                
-                <h4 style="margin: 20px 0 10px; color: var(--primary);">More Services</h4>
-                
-                <a class="service-list-item waLink" href="#">
-                    <i class="ri-whatsapp-line service-icon" style="color: #0088cc;"></i>
-                    <div class="service-text">
-                        <div style="font-weight: bold;">Whatsapp group</div>
-                        <div style="font-size: 12px; color: #777;">Join community</div>
-                    </div>
-                    <i class="ri-arrow-right-s-line text-muted" style="margin-left: auto;"></i>
-                </a>
-                
-                <a class="service-list-item tgLink" href="#">
-                    <i class="ri-telegram-line service-icon" style="color: #0088cc;"></i>
-                    <div class="service-text">
-                        <div style="font-weight: bold;">Telegram channel</div>
-                        <div style="font-size: 12px; color: #777;">Get updates</div>
-                    </div>
-                    <i class="ri-arrow-right-s-line text-muted" style="margin-left: auto;"></i>
-                </a>
-                
-                <a class="service-list-item" href="#guide">
-                    <i class="ri-book-read-line service-icon" style="color: #0088cc;"></i>
-                    <div class="service-text">
-                        <div style="font-weight: bold;">Platform Guide</div>
-                        <div style="font-size: 12px; color: #777;">Get useful informations</div>
-                    </div>
-                    <i class="ri-arrow-right-s-line text-muted" style="margin-left: auto;"></i>
-                </a>
-            </div>
-        </main>
-        
-        <main class="content hidden" id="me">
-            <h2 class="main-heading"><i data-lucide="chevron-left" class="text-orange" onclick="history.back()" style="cursor: pointer;"></i> Profile</h2>
-            
-            <section class="action-card" style="flex-direction: column;">
-                <div class="level-container">
-                    <div class="avatar-box" style="margin-left: 5px;">
-                        <img class="logo-img" alt="Logo">
-                    </div>
-                    
-                    <div>
-                        <div class="wallet-icon-bg">
-                            <i data-lucide="credit-card" size="16"></i>
-                            <span style="font-weight: bold;font-size: 0.6rem;">Wallet</span>
-                        </div>
-                        
-                        <div class="balance-container">
-                            <span class="asset-badge">NGN</span>
-                            <span class="balance-whole balance">0</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            
-            <section class="stats-grid">
-                <a href="#futures" class="stat-item teal-glow">
-                    <div class="stat-value text-teal" id="activeSharesCount">0</div>
-                    <div class="stat-label">Active Share(s)</div>
-                </a>
-                <a href="#recharge" class="stat-item yellow-glow">
-                    <i class="stat-icon text-yellow" data-lucide="move-down-left"></i>
-                    <div class="stat-value text-yellow"></div>
-                    <div class="stat-label">Deposit Now</div>
-                </a>
-                <a href="#withdraw" class="stat-item orange-glow">
-                    <i class="stat-icon text-orange" data-lucide="move-up-right"></i>
-                    <div class="stat-value text-orange"></div>
-                    <div class="stat-label">Withdraw Now</div>
-                </a>
-            </section>
-            <div class="section-title">
-                <i data-lucide="corner-left-down" class="text-yellow"></i>
-            </div>
-            
-            <a class="action-card" href="#history">
-                <div class="card-left">
-                    <div class="icon-box orange-bg-dim">
-                        <i data-lucide="history" class="text-orange"></i>
-                    </div>
-                    <div class="card-text">
-                        <h3>Activity History</h3>
-                        <p>Transaction history overview</p>
-                    </div>
-                </div>
-                <i data-lucide="chevron-right" class="text-muted"></i>
-            </a>
-            
-            <a class="action-card" href="#deposits">
-                <div class="card-left">
-                    <div class="icon-box orange-bg-dim">
-                        <i data-lucide="history" class="text-orange"></i>
-                    </div>
-                    <div class="card-text">
-                        <h3>Deposit History</h3>
-                        <p>Total Deposits overview</p>
-                    </div>
-                </div>
-                <i data-lucide="chevron-right" class="text-muted"></i>
-            </a>
-            
-            <a class="action-card" href="#withdrawals">
-                <div class="card-left">
-                    <div class="icon-box orange-bg-dim">
-                        <i data-lucide="clipboard-clock" class="text-orange"></i>
-                    </div>
-                    <div class="card-text">
-                        <h3>Withdrawal History</h3>
-                        <p>Total cashouts history</p>
-                    </div>
-                </div>
-                <i data-lucide="chevron-right" class="text-muted"></i>
-            </a>
-            <div class="action-card" onclick="changePassword()">
-                <div class="card-left">
-                    <div class="icon-box orange-bg-dim">
-                        <i data-lucide="lock" class="text-orange"></i>
-                    </div>
-                    <div class="card-text">
-                        <h3>Change Password</h3>
-                        <p>Make changes to password</p>
-                    </div>
-                </div>
-                <i data-lucide="chevron-right" class="text-muted"></i>
-            </div>
-            <div class="action-card" onclick="logoutUser()">
-                <div class="card-left">
-                    <div class="icon-box orange-bg-dim">
-                        <i data-lucide="log-out" style="color:red"></i>
-                    </div>
-                    <div class="card-text">
-                        <h3>Logout</h3>
-                        <p>Sign out session</p>
-                    </div>
-                </div>
-                <i data-lucide="chevron-right" class="text-muted"></i>
-            </div>
-        </main>
-        
-        <div id="welcomeModal" class="modal-overlay" style="display: none;">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 id="welcomeName">Welcome!</h2>
-                </div>
-                <div class="ticker-wrapper">
-                    <p class="ticker-text">No Announcement</p>
-                </div>
-                <div class="modal-body">
-                    <br />
-                    <hr>
-                    <p class="join-text">Join our platform groups below for more updates and actions:</p>
-                    
-                    <div class="social-actions">
-                        <a href="#" target="_blank" class="tgLink btn-social tg"><i class="ri-telegram-line" style="font-size:22px"></i>Join Telegram</a>
-                        <a href="#" target="_blank" class="waLink btn-social wa"><i class="ri-whatsapp-line" style="font-size: 22px;"></i>Join Whatsapp</a>
-                    </div>
-                </div>
-                
-                <button class="btn-close" onclick="closeWelcomeModal()">Continue to Dashboard</button>
-            </div>
+            margin: 2px 15px;
+          "
+        >
+          <span class="brand-name site-name">Flux mall</span>
+          <div class="header-right">
+            <h5 style="color: #918e8e" class="userId">ID:</h5>
+            <a href="#me" data-lucide="circle-user" class="text-teal"></a>
+          </div>
         </div>
-        
-        <nav class="bottom-nav">
-            <a href="#home" class="nav-item active">
-                <i class="ri-home-4-line"></i>
-                <span>HOME</span>
-            </a>
-            <a href="#futures" class="nav-item">
-                <i class="ri-shopping-bag-3-line"></i>
-                <span>SHARES</span>
-            </a>
-            <a href="#leaderboard" class="nav-item">
-                <i class="ri-user-add-line"></i>
-                <span>INVITE</span>
-            </a>
-            <a href="#service" class="nav-item">
+
+        <div id="ticker-wrapper" class="ticker-wrapper">
+          <i
+            style="
+              background: var(--primary);
+              position: absolute;
+              z-index: 20;
+              margin-top: -2px;
+              padding: 0 2px 0 5px;
+              font-size: 12pt;
+              border-right: 1px solid #f4f4f4;
+            "
+            class="ri-megaphone-line"
+          ></i>
+          <p id="tickerTex" class="ticker-text">No Announcement</p>
+        </div>
+      </header>
+      <main class="content" id="home">
+        <section class="profile-card">
+          <div class="profile-info">
+            <div class="avatar-box">
+              <img class="logo-img" alt="Logo" />
+            </div>
+            <div class="user-details">
+              <h2>Hello, <span class="userName"></span></h2>
+              <div class="level-badge">
+                <strong
+                  class="lvl-label email"
+                  style="font-size: 10px"
+                ></strong>
+              </div>
+            </div>
+            <div class="verified-status">
+              <i data-lucide="check-circle-2"></i> Active
+            </div>
+          </div>
+        </section>
+
+        <div class="action-card">
+          <div class="card-left">
+            <div class="icon-box yellow-bg">
+              <i data-lucide="gift"></i>
+            </div>
+            <div class="card-text">
+              <h3>Daily Check-in</h3>
+              <p id="checkinMsg" style="font-size: 0.7rem"></p>
+            </div>
+          </div>
+          <div class="card-right">
+            <button
+              class="btn-secondary"
+              id="checkinBtn"
+              onclick="handleDailyCheckIn()"
+            >
+              Check in <i data-lucide="chevron-down" size="14"></i>
+            </button>
+          </div>
+        </div>
+        <a class="action-card">
+          <div class="card-left">
+            <div class="icon-box orange-bg-dim">
+              <i data-lucide="ferris-wheel" class="text-teal"></i>
+            </div>
+            <div class="card-text">
+              <h3>Spin Wheel</h3>
+              <p>Refer 10 people to earn spin rewards</p>
+            </div>
+          </div>
+          <i data-lucide="chevron-right" class="text-muted"></i>
+        </a>
+        <br />
+        <div class="section-title" style="margin-bottom: 0">
+          <i data-lucide="flame" class="text-yellow"></i> Available Sharess
+        </div>
+        <section id="shares-container" class="tasks-section">
+          <div class="empty-state">
+            <div class="fox-logo-placeholder">🔮</div>
+            <p>No available share</p>
+          </div>
+        </section>
+      </main>
+      <main class="content hidden" id="guide">
+        <h2 class="main-heading">Platform Guide</h2>
+        <br />
+        <div class="guide">
+          <img class="logo-img" alt="" />
+          <code>
+            <p id="siteAbout">Built on trust</p>
+          </code>
+        </div>
+      </main>
+      <main class="content hidden" id="withdraw">
+        <h2 class="main-heading">
+          <i
+            data-lucide="chevron-left"
+            class="text-orange"
+            onclick="history.back()"
+            style="cursor: pointer"
+          ></i>
+          Account Withdrawal
+        </h2>
+        <a href="#withdrawals" style="float: right; color: #677281"
+          ><span data-lucide="history"></span
+        ></a>
+        <p class="sub-heading">Withdraw funds to your Fiat wallet</p>
+
+        <details>
+          <summary
+            class="section-title"
+            style="
+              font-size: 14px;
+              border: 1px solid green;
+              border-radius: 5px;
+              cursor: pointer;
+              justify-content: center;
+              align-items: center;
+              background-color: red;
+            "
+          >
+            <i data-lucide="flame" class="text-yellow"></i>Bind Bank Account
+            Details <i class="ri-arrow-right-up-fill text-teal"></i>
+          </summary>
+          <div class="action-card block">
+            <div class="section-title">
+              <i data-lucide="corner-left-down" class="text-yellow"></i
+              ><span id="status-msg"
+                >Please make sure to add your accurate bank details!
+              </span>
+            </div>
+
+            <div class="form-body">
+              <div class="input-wrapper">
+                <label class="section-title" style="margin: 0"
+                  >Bank Name:</label
+                >
+                <input type="text" id="bankName" placeholder="e.g. Kuda Bank" />
+              </div>
+
+              <div class="input-wrapper">
+                <label class="section-title" style="margin: 0"
+                  >Account Number:</label
+                >
+                <input
+                  type=" number"
+                  id="accNumber"
+                  placeholder="10-digit number"
+                />
+              </div>
+
+              <div class="input-wrapper">
+                <label class="section-title" style="margin: 0"
+                  >Account Name:</label
+                >
+                <input
+                  type="text"
+                  id="accName"
+                  placeholder="Full Name on Account"
+                />
+              </div>
+
+              <button id="saveBtn" class="share-btn" onclick="handleSave()">
+                Save Details
+              </button>
+            </div>
+          </div>
+        </details>
+
+        <div class="withdraw-form">
+          <label class="section-title">Amount to Withdraw</label>
+
+          <div class="input-wrapper">
+            <input
+              type="number"
+              id="withdrawAmount"
+              placeholder="Min: ₦--"
+              oninput="updateWithdrawPreview()"
+            />
+          </div>
+
+          <div class="preview-box">
+            <div class="prev-row">
+              <span>Service Fee:</span>
+              <span id="displayFee">₦0</span>
+            </div>
+            <div class="prev-row total">
+              <span>You will receive:</span>
+              <span id="netAmount">₦0.00</span>
+            </div>
+          </div>
+
+          <button
+            id="withdrawBtn"
+            onclick="handleWithdrawalSubmit()"
+            class="share-btn"
+            style="
+              margin: 0 auto;
+              width: 95%;
+              background-color: var(--orange);
+              border-radius: 6px;
+            "
+          >
+            Confirm withdrawal
+          </button>
+        </div>
+        <div class="action-card block">
+          <h4 style="color: var(--primary); text-align: center">
+            Important Notice
+          </h4>
+          <ul class="step-list">
+            <li class="step-item">
+              <div class="step-num">1</div>
+              <div class="step-desc" id="minLimitTxt">
+                Minimum widthrawal: --.
+              </div>
+            </li>
+            <li class="step-item">
+              <div class="step-num">2</div>
+              <div class="step-desc">
+                Withdrawal can take a processing time of 30mins - 1hr due to
+                high payout volume.
+              </div>
+            </li>
+            <li class="step-item">
+              <div class="step-num">3</div>
+              <div class="step-desc">
+                Ensure the bonded bank details are accurate.
+              </div>
+            </li>
+            <li class="step-item">
+              <div class="step-num">4</div>
+              <div class="step-desc">Withdrawal time 9am - 6am daily.</div>
+            </li>
+          </ul>
+        </div>
+      </main>
+
+      <main class="content hidden" id="recharge">
+        <h2 class="main-heading">
+          <i
+            data-lucide="chevron-left"
+            class="text-orange"
+            onclick="history.back()"
+            style="cursor: pointer"
+          ></i>
+          Recharge Account
+        </h2>
+        <a href="#deposits" style="float: right; color: #677281"
+          ><span data-lucide="history"></span
+        ></a>
+        <p class="sub-heading">Deposit funds into your account</p>
+        <form>
+          <div class="section-title">
+            <i data-lucide="flame" class="text-teal"></i>Quick select
+          </div>
+          <div class="amount-grid" id="amountGrid">
+            <button class="amt-btn active" data-value="3000">₦3,000</button>
+          </div>
+
+          <div class="custom-input">
+            <div class="input-wrapper">
+              <span>₦</span>
+              <input type="number" id="customAmount" value="3000" readonly />
+            </div>
+            <label for="attest"
+              ><input type="checkbox" id="attest" required /> I attest that I've
+              read and understood the notice below</label
+            >
+          </div>
+
+          <button
+            id="rechargeBtn"
+            class="share-btn"
+            style="
+              margin: 0 auto;
+              width: 95%;
+              background-color: var(--orange);
+              border-radius: 6px;
+            "
+            type="submit"
+          >
+            Recharge Now
+          </button>
+        </form>
+        <br />
+        <div class="action-card block">
+          <h4 style="color: var(--primary); text-align: center">
+            Important Notice
+          </h4>
+          <ul class="step-list">
+            <li class="step-item">
+              <div class="step-num">1</div>
+              <div class="step-desc">
+                Amounts less than the minimum threshold will not be credited.
+              </div>
+            </li>
+            <li class="step-item">
+              <div class="step-num">2</div>
+              <div class="step-desc">
+                Copy the correct Reference Code and paste in your bank
+                transaction narration else your deposit will be void.
+              </div>
+            </li>
+            <li class="step-item">
+              <div class="step-num">3</div>
+              <div class="step-desc">
+                Copy the correct account number for fast confirmation, Payments
+                approvals takes approximately 1~2mins.
+              </div>
+            </li>
+            <li class="step-item">
+              <div class="step-num">4</div>
+              <div class="step-desc">
+                All payments must be done on the platform, not to any third
+                party agents.
+              </div>
+            </li>
+            <li class="step-item">
+              <div class="step-num">5</div>
+              <div class="step-desc">
+                Always remain on site during payments and do not refresh the
+                site untill payments processed completely.
+              </div>
+            </li>
+          </ul>
+        </div>
+      </main>
+
+      <main class="content hidden" id="deposits">
+        <h2 class="main-heading">
+          <i
+            data-lucide="chevron-left"
+            class="text-orange"
+            onclick="history.back()"
+            style="cursor: pointer"
+          ></i>
+          Deposit history
+        </h2>
+        <p class="sub-heading">Manage All your deposits here.</p>
+        <section id="depositList"></section>
+      </main>
+
+      <main class="content hidden" id="withdrawals">
+        <h2 class="main-heading">
+          <i
+            data-lucide="chevron-left"
+            class="text-orange"
+            onclick="history.back()"
+            style="cursor: pointer"
+          ></i>
+          Withdrawal history
+        </h2>
+        <p class="sub-heading">Manage All your withdrawals here.</p>
+        <section id="withdrawList"></section>
+      </main>
+
+      <main class="content hidden" id="leaderboard">
+        <h2 class="main-heading">Leaderboard</h2>
+        <p class="sub-heading">Manage Referals inline with your Rank.</p>
+
+        <div class="team-container">
+          <div class="reward-banner">
+            <div>
+              <div style="font-size: 20px; font-weight: bold" id="totalTeam">
+                0.00
+              </div>
+              <div style="font-size: 12px">Team Size</div>
+            </div>
+            <div style="border-left: 1px solid rgba(255, 255, 255, 0.3)"></div>
+            <div>
+              <div
+                style="font-size: 20px; font-weight: bold"
+                id="totalEarnings"
+              >
+                0.00
+              </div>
+              <div style="font-size: 12px">Invite Reward</div>
+            </div>
+          </div>
+          <div class="action-car block">
+            <h4 style="color: var(--primary); text-align: center">
+              Event Rules
+            </h4>
+            <ul class="step-list">
+              <li class="step-item">
+                <div class="step-num">1</div>
+                <div class="step-desc">
+                  Click 'Copy' button to copy the link or select other sharing
+                  methods.
+                </div>
+              </li>
+              <li class="step-item">
+                <div class="step-num">2</div>
+                <div class="step-desc">
+                  Share the link with friends and ensure they register using
+                  your shared link.
+                </div>
+              </li>
+              <li class="step-item">
+                <div class="step-num">3</div>
+                <div class="step-desc">
+                  After friends register and complete tasks, you receive
+                  additional commissions and increased rank.
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="level-tabs">
+            <div class="level-card">
+              <h4>Level 1 (<span id="ref1"></span>%)</h4>
+              <p><span id="countL1">0</span> Members</p>
+            </div>
+            <div class="level-card">
+              <h4>Level 2 (<span id="ref2"></span>%)</h4>
+              <p><span id="countL2">0</span> Members</p>
+            </div>
+            <div class="level-card">
+              <h4>Level 3 (<span id="ref3"></span>%)</h4>
+              <p><span id="countL3">0</span> Members</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="referral-car action-card block">
+          <div class="icon-box-orange"><i data-lucide="users"></i></div>
+          <h3>Invite Your Friends</h3>
+          <p>Earn from your friend's first deposit!</p>
+
+          <div class="referral-box">
+            <input type="text" id="referralURL" readonly />
+            <button onclick="copyReferralLink()" id="copyBtn" class="copy-btn">
+              <i class="ri-file-copy-line"></i>
+            </button>
+          </div>
+
+          <button class="whatsapp-share-btn" onclick="shareOnWhatsApp()">
+            <i class="ri-whatsapp-line" style="font-size: 16px"></i> Share on
+            WhatsApp
+          </button>
+          <div
+            style="display: none; width: 100%; margin: 10px 0 0 0; gap: 10px"
+          >
+            <div class="share-btn tg">
+              <i class="fa-brands fa-telegram"></i>
+              <span>Telegram</span>
+            </div>
+            <div class="share-btn fb">
+              <i class="fa-brands fa-facebook"></i>
+              <span>Facebook</span>
+            </div>
+          </div>
+        </div>
+
+        <br />
+        <div class="tab-container">
+          <button class="tab hidden">
+            <i data-lucide="users" size="16"></i> Invites
+          </button>
+          <button class="tab active">
+            <i data-lucide="trophy" size="16"></i> Rank
+          </button>
+        </div>
+
+        <div class="leader-list hidde">
+          <div class="section-title">
+            <i data-lucide="corner-left-down" class="text-orange"></i>
+            <p class="text-teal" style="text-align: center">
+              Only the 3 Top members are shown in the list below.
+            </p>
+          </div>
+          <div class="leader-item">
+            <div class="medal silver">🏆</div>
+            <i data-lucide="user-round" class="avatar"></i>
+            <div class="leader-info">
+              <span class="name">Bensonexchange</span>
+              <span class="sub text-yellow">Lvl. 6 completed</span>
+            </div>
+            <i data-lucide="move-up-right" class="text-teal"></i>
+          </div>
+          <div class="leader-item">
+            <div class="medal gold">🥇</div>
+            <i data-lucide="user-round" class="avatar"></i>
+            <div class="leader-info">
+              <span class="name">ayungpwi</span>
+              <span class="sub text-yellow">Lvl. 5 completed</span>
+            </div>
+            <i data-lucide="move-down-left" class="text-orange"></i>
+          </div>
+          <div class="leader-item">
+            <div class="medal silver">🥈</div>
+            <i data-lucide="user-round" class="avatar"></i>
+            <div class="leader-info">
+              <span class="name">GladyzGodspower</span>
+              <span class="sub text-yellow">Lvl. 5 completed</span>
+            </div>
+            <i data-lucide="move-down-left" class="text-orange"></i>
+          </div>
+        </div>
+      </main>
+
+      <main
+        class="content hidden"
+        style="position: relative; padding-top: 0"
+        id="futures"
+      >
+        <div
+          style="
+            background: var(--primary-gradient);
+            padding: 30px 20px 60px 20px;
+            border-bottom-left-radius: 30px;
+            color: #fff;
+            border-bottom-right-radius: 30px;
+          "
+        >
+          <h2 style="font-size: 24px; font-weight: 700">My Orders</h2>
+        </div>
+
+        <div id="myInvestmentsContainer" class="active-orders">
+          <div class="empty-state">
+            <div class="fox-logo-placeholder">🔮</div>
+            <p>You haven't purchased any possible Future yet</p>
+          </div>
+        </div>
+      </main>
+
+      <main id="history" class="content hidden">
+        <div class="history-section">
+          <div
+            class="history-header"
+            style="width: 100%; display: flex; justify-content: space-between"
+          >
+            <h4>Recent Activity</h4>
+            <a style="float: right; color: #677281" onclick="fetchUserHistory()"
+              ><span data-lucide="refresh-cw"></span
+            ></a>
+          </div>
+          <div id="historyList" class="history-list"></div>
+        </div>
+      </main>
+
+      <main
+        id="service"
+        class="content hidden"
+        style="position: relative; padding-top: 0"
+      >
+        <div
+          style="
+            background: var(--primary-gradient);
+            padding: 30px 20px 60px 20px;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            color: #fff;
+          "
+        >
+          <h2 style="font-size: 24px; font-weight: 700">Customer Service</h2>
+        </div>
+
+        <div class="active-orders">
+          <div
+            class="order-card"
+            style="
+              color: var(--text-main);
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              width: 100%;
+              margin-top: -20px;
+              padding: 20px 10px;
+            "
+          >
+            <div style="display: flex; align-items: center">
+              <div
+                class="avatar status-badge"
+                style="
+                  width: 40px;
+                  height: 40px;
+                  margin-right: 10px;
+                  background: rgba(255, 255, 255, 0.2);
+                  width: 45px;
+                  height: 45px;
+                  border-radius: 50%;
+                  margin-right: 10px;
+                  font-weight: 500;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-size: 24px;
+                "
+              >
                 <i class="ri-customer-service-2-line"></i>
-                <span>SUPPORT</span>
-            </a>
-            <a href="#me" class="nav-item">
-                <i class="ri-user-3-line"></i>
-                <span>PROFILE</span>
-            </a>
-        </nav>
-        
+              </div>
+              <div>
+                <div style="font-weight: bold" class="status-badge">
+                  Online Service
+                </div>
+                <div style="font-size: 12px">24/7 Available Now</div>
+              </div>
+            </div>
+            <button
+              style="background: var(--success); color: white"
+              class="btn btn-secondar"
+            >
+              Contact<i class="ri-flashlight-fill" style="color: #f1c40f"></i>
+            </button>
+          </div>
+
+          <h4 style="margin: 20px 0 10px; color: var(--primary)">
+            More Services
+          </h4>
+
+          <a class="service-list-item waLink" href="#">
+            <i class="ri-whatsapp-line service-icon" style="color: #0088cc"></i>
+            <div class="service-text">
+              <div style="font-weight: bold">Whatsapp group</div>
+              <div style="font-size: 12px; color: #777">Join community</div>
+            </div>
+            <i
+              class="ri-arrow-right-s-line text-muted"
+              style="margin-left: auto"
+            ></i>
+          </a>
+
+          <a class="service-list-item tgLink" href="#">
+            <i class="ri-telegram-line service-icon" style="color: #0088cc"></i>
+            <div class="service-text">
+              <div style="font-weight: bold">Telegram channel</div>
+              <div style="font-size: 12px; color: #777">Get updates</div>
+            </div>
+            <i
+              class="ri-arrow-right-s-line text-muted"
+              style="margin-left: auto"
+            ></i>
+          </a>
+
+          <a class="service-list-item" href="#guide">
+            <i
+              class="ri-book-read-line service-icon"
+              style="color: #0088cc"
+            ></i>
+            <div class="service-text">
+              <div style="font-weight: bold">Platform Guide</div>
+              <div style="font-size: 12px; color: #777">
+                Get useful informations
+              </div>
+            </div>
+            <i
+              class="ri-arrow-right-s-line text-muted"
+              style="margin-left: auto"
+            ></i>
+          </a>
+        </div>
+      </main>
+
+      <main class="content hidden" id="me">
+        <h2 class="main-heading">
+          <i
+            data-lucide="chevron-left"
+            class="text-orange"
+            onclick="history.back()"
+            style="cursor: pointer"
+          ></i>
+          Profile
+        </h2>
+
+        <section class="action-card" style="flex-direction: column">
+          <div class="level-container">
+            <div class="avatar-box" style="margin-left: 5px">
+              <img class="logo-img" alt="Logo" />
+            </div>
+
+            <div>
+              <div class="wallet-icon-bg">
+                <i data-lucide="credit-card" size="16"></i>
+                <span style="font-weight: bold; font-size: 0.6rem">Wallet</span>
+              </div>
+
+              <div class="balance-container">
+                <span class="asset-badge">NGN</span>
+                <span class="balance-whole balance">0</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="stats-grid">
+          <a href="#futures" class="stat-item teal-glow">
+            <div class="stat-value text-teal" id="activeSharesCount">0</div>
+            <div class="stat-label">Active Share(s)</div>
+          </a>
+          <a href="#recharge" class="stat-item yellow-glow">
+            <i class="stat-icon text-yellow" data-lucide="move-down-left"></i>
+            <div class="stat-value text-yellow"></div>
+            <div class="stat-label">Deposit Now</div>
+          </a>
+          <a href="#withdraw" class="stat-item orange-glow">
+            <i class="stat-icon text-orange" data-lucide="move-up-right"></i>
+            <div class="stat-value text-orange"></div>
+            <div class="stat-label">Withdraw Now</div>
+          </a>
+        </section>
+        <div class="section-title">
+          <i data-lucide="corner-left-down" class="text-yellow"></i>
+        </div>
+
+        <a class="action-card" href="#history">
+          <div class="card-left">
+            <div class="icon-box orange-bg-dim">
+              <i data-lucide="history" class="text-orange"></i>
+            </div>
+            <div class="card-text">
+              <h3>Activity History</h3>
+              <p>Transaction history overview</p>
+            </div>
+          </div>
+          <i data-lucide="chevron-right" class="text-muted"></i>
+        </a>
+
+        <a class="action-card" href="#deposits">
+          <div class="card-left">
+            <div class="icon-box orange-bg-dim">
+              <i data-lucide="history" class="text-orange"></i>
+            </div>
+            <div class="card-text">
+              <h3>Deposit History</h3>
+              <p>Total Deposits overview</p>
+            </div>
+          </div>
+          <i data-lucide="chevron-right" class="text-muted"></i>
+        </a>
+
+        <a class="action-card" href="#withdrawals">
+          <div class="card-left">
+            <div class="icon-box orange-bg-dim">
+              <i data-lucide="clipboard-clock" class="text-orange"></i>
+            </div>
+            <div class="card-text">
+              <h3>Withdrawal History</h3>
+              <p>Total cashouts history</p>
+            </div>
+          </div>
+          <i data-lucide="chevron-right" class="text-muted"></i>
+        </a>
+        <div class="action-card" onclick="changePassword()">
+          <div class="card-left">
+            <div class="icon-box orange-bg-dim">
+              <i data-lucide="lock" class="text-orange"></i>
+            </div>
+            <div class="card-text">
+              <h3>Change Password</h3>
+              <p>Make changes to password</p>
+            </div>
+          </div>
+          <i data-lucide="chevron-right" class="text-muted"></i>
+        </div>
+        <div class="action-card" onclick="logoutUser()">
+          <div class="card-left">
+            <div class="icon-box orange-bg-dim">
+              <i data-lucide="log-out" style="color: red"></i>
+            </div>
+            <div class="card-text">
+              <h3>Logout</h3>
+              <p>Sign out session</p>
+            </div>
+          </div>
+          <i data-lucide="chevron-right" class="text-muted"></i>
+        </div>
+      </main>
+
+      <div id="welcomeModal" class="modal-overlay" style="display: none">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 id="welcomeName">Welcome!</h2>
+          </div>
+          <div class="ticker-wrapper">
+            <p class="ticker-text">No Announcement</p>
+          </div>
+          <div class="modal-body">
+            <br />
+            <hr />
+            <p class="join-text">
+              Join our platform groups below for more updates and actions:
+            </p>
+
+            <div class="social-actions">
+              <a href="#" target="_blank" class="tgLink btn-social tg"
+                ><i class="ri-telegram-line" style="font-size: 22px"></i>Join
+                Telegram</a
+              >
+              <a href="#" target="_blank" class="waLink btn-social wa"
+                ><i class="ri-whatsapp-line" style="font-size: 22px"></i>Join
+                Whatsapp</a
+              >
+            </div>
+          </div>
+
+          <button class="btn-close" onclick="closeWelcomeModal()">
+            Continue to Dashboard
+          </button>
+        </div>
+      </div>
+
+      <nav class="bottom-nav">
+        <a href="#home" class="nav-item active">
+          <i class="ri-home-4-line"></i>
+          <span>HOME</span>
+        </a>
+        <a href="#futures" class="nav-item">
+          <i class="ri-shopping-bag-3-line"></i>
+          <span>SHARES</span>
+        </a>
+        <a href="#leaderboard" class="nav-item">
+          <i class="ri-user-add-line"></i>
+          <span>INVITE</span>
+        </a>
+        <a href="#service" class="nav-item">
+          <i class="ri-customer-service-2-line"></i>
+          <span>SUPPORT</span>
+        </a>
+        <a href="#me" class="nav-item">
+          <i class="ri-user-3-line"></i>
+          <span>PROFILE</span>
+        </a>
+      </nav>
     </div>
-    
-    
+
     <script src="script.js" type="module"></script>
     <script>
-        /**
-         * Navigation & Tab Switcher Script
-         * Developed by Zaddy
-         */
-        const userName = document.querySelectorAll(".userName")
-        const userId = document.querySelectorAll(".userId")
-        const userEmail = document.querySelectorAll(".email")
-        const tBalance = document.querySelectorAll(".balance")
-        const loaderContainer = document.getElementById('loader-container')
-        
-        function showLoading(show) {
-            if (show) {
-                loaderContainer.style.display = 'flex';
-            } else {
-                loaderContainer.style.display = 'none';
-            }
-        }
-        
-        // 1. Initialize Lucide Icons immediately 
-        lucide.createIcons();
-        // 2. Select global elements
-        const navItems = document.querySelectorAll('.nav-item');
-        const allPages = document.querySelectorAll('.content');
-        
-        /**
-         * Main function to handle page switching based on the URL hash
-         */
-        function switchPageByHash() {
-            // Get the hash from the URL (e.g., "#hometab")
-            // If no hash exists, default to '#hometab'
-            const hash = window.location.hash || '#hometab';
-            
-            // Remove the '#' symbol to get the ID (e.g., "hometab")
-            const targetId = hash.substring(1);
-            const targetElement = document.getElementById(targetId);
-            
-            // Only proceed if the element with that ID exists in the HTML
-            if (targetElement) {
-                // A. Reset State: Hide all pages and deactivate all nav links
-                allPages.forEach(page => {
-                    page.classList.add('hidden');
-                });
-                
-                navItems.forEach(item => {
-                    item.classList.remove('active');
-                });
-                
-                // B. Activate Content: Show the targeted page
-                targetElement.classList.remove('hidden');
-                
-                // C. Activate Nav: Highlight the link that matches the current hash
-                navItems.forEach(item => {
-                    // We use getAttribute to get the exact string like "#hometab"
-                    if (item.getAttribute('href') === hash) {
-                        item.classList.add('active');
-                    }
-                });
-                
-                // D. Re-run Lucide (Optional)
-                // If your hidden pages contain icons that aren't rendering, uncomment the line below:
-                // lucide.createIcons();
-                
-            } else {
-                console.warn(`Zaddy, the ID "${targetId}" was not found in the document.`);
-            }
-        }
-        
-        // 3. Event Listeners
-        // Run when the page is first loaded or refreshed
-        window.addEventListener('DOMContentLoaded', () => {
-            switchPageByHash();
-        });
-        // Run every time the URL hash changes (when a user clicks a nav link)
-        window.addEventListener('hashchange', switchPageByHash);
-    </script>
-    
-</body>
+      /**
+       * Navigation & Tab Switcher Script
+       * Developed by Zaddy
+       */
+      const userName = document.querySelectorAll(".userName");
+      const userId = document.querySelectorAll(".userId");
+      const userEmail = document.querySelectorAll(".email");
+      const tBalance = document.querySelectorAll(".balance");
+      const loaderContainer = document.getElementById("loader-container");
 
+      function showLoading(show) {
+        if (show) {
+          loaderContainer.style.display = "flex";
+        } else {
+          loaderContainer.style.display = "none";
+        }
+      }
+
+      // 1. Initialize Lucide Icons immediately
+      lucide.createIcons();
+      // 2. Select global elements
+      const navItems = document.querySelectorAll(".nav-item");
+      const allPages = document.querySelectorAll(".content");
+
+      /**
+       * Main function to handle page switching based on the URL hash
+       */
+      function switchPageByHash() {
+        // Get the hash from the URL (e.g., "#hometab")
+        // If no hash exists, default to '#hometab'
+        const hash = window.location.hash || "#hometab";
+
+        // Remove the '#' symbol to get the ID (e.g., "hometab")
+        const targetId = hash.substring(1);
+        const targetElement = document.getElementById(targetId);
+
+        // Only proceed if the element with that ID exists in the HTML
+        if (targetElement) {
+          // A. Reset State: Hide all pages and deactivate all nav links
+          allPages.forEach((page) => {
+            page.classList.add("hidden");
+          });
+
+          navItems.forEach((item) => {
+            item.classList.remove("active");
+          });
+
+          // B. Activate Content: Show the targeted page
+          targetElement.classList.remove("hidden");
+
+          // C. Activate Nav: Highlight the link that matches the current hash
+          navItems.forEach((item) => {
+            // We use getAttribute to get the exact string like "#hometab"
+            if (item.getAttribute("href") === hash) {
+              item.classList.add("active");
+            }
+          });
+
+          // D. Re-run Lucide (Optional)
+          // If your hidden pages contain icons that aren't rendering, uncomment the line below:
+          // lucide.createIcons();
+        } else {
+          console.warn(
+            `Zaddy, the ID "${targetId}" was not found in the document.`,
+          );
+        }
+      }
+
+      // 3. Event Listeners
+      // Run when the page is first loaded or refreshed
+      window.addEventListener("DOMContentLoaded", () => {
+        switchPageByHash();
+      });
+      // Run every time the URL hash changes (when a user clicks a nav link)
+      window.addEventListener("hashchange", switchPageByHash);
+    </script>
+  </body>
 </html>
