@@ -351,7 +351,7 @@ onAuthStateChanged(auth, (user) => {
                 "Payment error. Please refresh.",
                 "error",
                 "ri-close-line",
-                "Error",
+                "Error",  
               );
               return;
             }
