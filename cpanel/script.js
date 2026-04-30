@@ -54,7 +54,66 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 // --- 1. PRIMARY APP (Used for Admin Login) ---
 
-// --- 2. SECONDARY APP (Used ONLY for creating users) ---
+// ========================================
+// CORE UI HELPERS (HOISTED FOR UPLINK)
+// ========================================
+window.showTab = (tabId, el) => {
+  const tab = document.getElementById(tabId);
+  if (!tab) {
+    console.warn(`[Elite Protocol] Target node '${tabId}' not localized in DOM.`);
+    return;
+  }
+  document
+    .querySelectorAll(".tab-content")
+    .forEach((t) => t.classList.remove("active"));
+  document
+    .querySelectorAll(".nav-item")
+    .forEach((i) => i.classList.remove("active"));
+  
+  tab.classList.add("active");
+  if (el) el.classList.add("active");
+};
+
+window.showModal = (cfg) => {
+  const old = document.getElementById(cfg.id);
+  if (old) old.remove();
+
+  const overlay = document.createElement("div");
+  overlay.id = cfg.id;
+  overlay.className = "modal-overlay";
+  
+  const buttonsHTML = (cfg.buttons || [])
+    .map(btn => `
+        <button class="${btn.class || "btn-submit"}" 
+                onclick="${btn.onclick}" 
+                style="${btn.style || ""}">${btn.text}</button>
+    `).join("");
+
+  overlay.innerHTML = `
+        <div class="modal-card" style="max-width: ${cfg.width || "500px"}">
+            <div class="modal-header">
+                <h3>${cfg.title}</h3>
+                <span class="modal-close" onclick="document.getElementById('${cfg.id}').remove()">&times;</span>
+            </div>
+            <div class="modal-body">${cfg.content}</div>
+            <div class="modal-footer">
+                ${buttonsHTML}
+            </div>
+        </div>
+    `;
+  document.body.appendChild(overlay);
+  overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+};
+
+window.hideGlobalLoader = () => {
+  const loader = document.getElementById("global-loader");
+  if (loader) {
+    loader.style.opacity = "0";
+    setTimeout(() => (loader.style.display = "none"), 500);
+  }
+};
+
+// --- INITIALIZATION ---
 // We give it a unique name like "Secondary" so it doesn't conflict
 const secondaryApp = initializeApp(firebaseConfig, "Secondary");
 const secondaryAuth = getAuth(secondaryApp);
@@ -153,6 +212,7 @@ async function verifyAdminBiometric() {
 }
 
 onAuthStateChanged(auth, async (user) => {
+  hideGlobalLoader();
   const cookie = getCookie(SESSION_NAME);
   // Valid session
   if (user && cookie) {
@@ -174,6 +234,17 @@ onAuthStateChanged(auth, async (user) => {
       document.title = originalTitle;
     };
 
+    // --- MASTER CONFIG SYNC ---
+    onSnapshot(doc(db, "flash-sales", "auth", "settings", "config"), (snap) => {
+      if (snap.exists()) {
+        const data = snap.data();
+        const mToggle = document.getElementById("maintenanceToggle");
+        const bToggle = document.getElementById("masterBankLockToggle");
+        if (mToggle) mToggle.checked = !!data.isMaintenance;
+        if (bToggle) bToggle.checked = !!data.globalBankLock;
+      }
+    });
+
     // --- CHARTS ---
     let pieChart, barChart;
 
@@ -182,47 +253,63 @@ onAuthStateChanged(auth, async (user) => {
       pieChart = new Chart(pCtx, {
         type: "doughnut",
         data: {
-          labels: ["Success", "Pending", "Declined"],
+          labels: ["Verified", "Pending", "Failed"],
           datasets: [
             {
               data: [0, 0, 0],
-              backgroundColor: ["#05cd99", "#f6ad55", "#ee5d50"],
+              backgroundColor: ["#00ff88", "#ffb300", "#ff4b2b"],
+              borderColor: "rgba(255, 255, 255, 0.05)",
+              borderWidth: 2,
+              hoverOffset: 15,
             },
           ],
         },
-        options: { plugins: { legend: { position: "bottom" } } },
+        options: { 
+          plugins: { 
+            legend: { 
+              position: "bottom",
+              labels: { color: "#d1d5db", font: { family: "Space Grotesk", weight: "600" } }
+            } 
+          },
+          cutout: "75%",
+          animation: { duration: 1500, easing: "easeOutQuart" }
+        },
       });
 
       const bCtx = document.getElementById("barChart").getContext("2d");
       barChart = new Chart(bCtx, {
         type: "bar",
         data: {
-          labels: ["Deposits", "Withdrawals"],
+          labels: ["Ingress (Dep)", "Egress (Wth)"],
           datasets: [
             {
-              label: "₦ Value",
+              label: "₦ Protocol Volume",
               data: [0, 0],
-              backgroundColor: ["#4318ff", "#ee5d50"],
-              borderRadius: 10,
+              backgroundColor: ["rgba(0, 255, 136, 0.15)", "rgba(255, 75, 43, 0.15)"],
+              borderColor: ["#00ff88", "#ff4b2b"],
+              borderWidth: 2,
+              borderRadius: 12,
             },
           ],
         },
         options: {
           responsive: true,
-          // 🚀 THIS IS THE KEY LINE:
           maintainAspectRatio: false,
           plugins: {
-            legend: { display: false, position: "bottom" },
+            legend: { display: false },
           },
           scales: {
             y: {
               beginAtZero: true,
-              ticks: {
-                // Optional: make font bigger since chart is taller
-                font: { size: 8 },
-              },
+              grid: { color: "rgba(255, 255, 255, 0.03)" },
+              ticks: { color: "#9ca3af", font: { size: 10 } },
             },
+            x: {
+              grid: { display: false },
+              ticks: { color: "#d1d5db", font: { weight: "600" } },
+            }
           },
+          animation: { duration: 1500, easing: "easeOutQuart" }
         },
       });
     }
@@ -235,6 +322,12 @@ onAuthStateChanged(auth, async (user) => {
         orderBy("createdAt", "desc"),
       ),
       (snap) => {
+        console.log("[Elite Protocol] Syncing Ingress Matrix...");
+        const pulse = document.querySelector(".logo");
+        if (pulse) {
+          pulse.style.textShadow = "0 0 20px var(--primary)";
+          setTimeout(() => pulse.style.textShadow = "none", 300);
+        }
         allData = [];
         let stats = {
           successV: 0,
@@ -299,6 +392,25 @@ onAuthStateChanged(auth, async (user) => {
         renderDeposits(allData);
         renderUsers();
       },
+    );
+
+    // Egress (Withdrawal) Snapshot for Bar Chart Sync
+    onSnapshot(
+      query(collection(db, "flash-sales", "auth", "withdrawals"), orderBy("createdAt", "desc")),
+      (snap) => {
+        console.log("[Elite Protocol] Syncing Egress Matrix...");
+        let wTotal = 0;
+        snap.forEach((docSnap) => {
+          if (docSnap.data().status === "success") {
+            wTotal += Number(docSnap.data().amount || 0);
+          }
+        });
+        if (barChart) {
+          barChart.data.datasets[0].data[1] = wTotal;
+          barChart.update("none"); // Silk update without re-animating
+        }
+        renderWithdrawals(snap);
+      }
     );
     // --- 3-LEVEL COMMISSION LOGIC ---
     window.handleReferralCommission = async function (
@@ -390,21 +502,23 @@ onAuthStateChanged(auth, async (user) => {
       tbody.innerHTML = data
         .map(
           (i) => `
-                <tr>
+                <tr class="animate-silk">
                     <td>${i.createdAt ? new Date(i.createdAt.seconds * 1000).toLocaleDateString() : "Now"}</td>
-                    <td><small>${i.userId.substring(0, 7) + "..."}</small></td>
-                    <td>₦${Number(i.amount).toLocaleString().substring(0, 8) + "..."}</td>
-                    <td><code>${i.refCode.toLocaleString().substring(0, 8) + "..."}</code></td>
+                    <td><code style="font-size:0.7rem; opacity:0.8;">${i.userId.substring(0, 10)}...</code></td>
+                    <td style="font-weight:700; color:var(--primary);">₦${Number(i.amount).toLocaleString()}</td>
+                    <td style="font-size:0.8rem; font-family:monospace; opacity:0.7;">${i.refCode}</td>
                     <td><span class="status-badge ${i.status}">${i.status}</span></td>
                     <td>
+                        <div style="display:flex; gap:8px;">
                         ${
                           i.status === "pending"
                             ? `
                             <button class="btn-action" style="background:var(--success)" onclick="handleReferralCommission('${i.userId}','${i.amount}','${i.id}')">✔</button>
-                            <button class="btn-action" style="background:var(--danger)" onclick="updateStatus('${i.id}','declined','${i.amount}','${i.userId}')">✖</button>
+                            <button class="btn-action" style="background:var(--error)" onclick="updateStatus('${i.id}','declined','${i.amount}','${i.userId}')">✖</button>
                         `
-                            : `<button class="btn-action" style="color:var(--danger); background: transparent" onclick="deleteStatus('${i.id}', 'deposits')">✖</butt`
+                            : `<button class="btn-action" style="color:var(--error); background: transparent" onclick="deleteStatus('${i.id}', 'deposits')"><i class="ri-delete-bin-line"></i></button>`
                         }
+                        </div>
                     </td>
                 </tr>
             `,
@@ -1943,79 +2057,7 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-// 2. NAVIGATION
-window.showTab = (tabId, el) => {
-  document
-    .querySelectorAll(".tab-content")
-    .forEach((t) => t.classList.remove("active"));
-  document
-    .querySelectorAll(".nav-item")
-    .forEach((i) => i.classList.remove("active"));
-  document.getElementById(tabId).classList.add("active");
-  if (el) {
-    el.classList.add("active");
-  }
-};
-
-/**
- * @param {Object} cfg - Configuration object
- * @param {string} cfg.id - Unique ID for the modal
- * @param {string} cfg.title - Header text
- * @param {string} cfg.content - The HTML body of the modal
- * @param {Array} cfg.buttons - Array of button objects {text, class, onclick}
- */
-window.showModal = (cfg) => {
-  // 1. Cleanup old versions
-  const old = document.getElementById(cfg.id);
-  if (old) old.remove();
-
-  // 2. Create Wrapper
-  const overlay = document.createElement("div");
-  overlay.id = cfg.id;
-  overlay.className = "modal-overlay";
-  overlay.style = `
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0,0,0,0.85); display: flex; align-items: center;
-        justify-content: center; z-index: 9999; backdrop-filter: blur(8px);
-        animation: fadeIn 0.3s ease;
-    `;
-
-  // 3. Generate Buttons HTML
-  const buttonsHTML = (cfg.buttons || [])
-    .map(
-      (btn) => `
-        <button class="${btn.class || "btn-submit"}" 
-                onclick="${btn.onclick}" 
-                style="${btn.style || ""}">${btn.text}</button>
-    `,
-    )
-    .join("");
-
-  // 4. Create Card
-  const card = document.createElement("div");
-  card.className = "modal-card";
-  card.style = `
-        background: var(--card); color: var(--text);max-width: ${cfg.width || "450px"};
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        border: 1px solid var(--border); transform: scale(1);
-    `;
-  card.innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-            <h3 style="margin:0; font-size:1.4rem;">${cfg.title}</h3>
-            <span onclick="document.getElementById('${cfg.id}').remove()" style="cursor:pointer; opacity:0.5; font-size:1.5rem;">&times;</span>
-        </div>
-        <div class="modal-body" style="margin-bottom:25px;">${cfg.content}</div>
-        <div class="modal-footer" style="display:flex; gap:12px; justify-content:flex-end;">
-            ${buttonsHTML}
-        </div>
-    `;
-  overlay.appendChild(card);
-  document.body.appendChild(overlay);
-  // Close on click outside
-  overlay.onclick = (e) => {
-    if (e.target === overlay) overlay.remove();
-  };
-};
+// 2. NAVIGATION (REDUNDANT: DEFINED AT TOP)
 
 // ===========================
 // COOKIE HELPERS
@@ -2051,7 +2093,7 @@ function deleteCookie(name) {
 // LOGOUT
 // ===========================
 window.logoutAdmin = async function () {
-  //await signOut(auth);
+  await signOut(auth);
   lastBiometricVerification = 0;
   deleteCookie(SESSION_NAME);
 
@@ -2068,7 +2110,7 @@ window.handleAdminLogin = async function (e) {
   const btn = document.getElementById("loginBtn");
 
   try {
-    btn.innerText = "Securing Session...";
+    btn.classList.add("btn-loading");
 
     // Persist login across browser close
     await setPersistence(auth, browserLocalPersistence);
@@ -2189,8 +2231,8 @@ window.handleAdminLogin = async function (e) {
     window.location.reload();
   } catch (err) {
     alert(err.message);
-
-    btn.innerText = "Login";
+  } finally {
+    btn.classList.remove("btn-loading");
   }
 };
 
@@ -2214,8 +2256,7 @@ window.resetBrandingSecure = async () => {
     const btn = document.getElementById("resetBrandingBtn");
 
     if (btn) {
-      btn.disabled = true;
-      btn.innerText = "Verifying...";
+      btn.classList.add("btn-loading");
     }
 
     // ===============================
@@ -2309,7 +2350,7 @@ window.saveThemeConfig = async () => {
     console.error(err);
     alert("Failed to update theme.");
   } finally {
-    //btn.innerText = "Save Theme Changes";
+    btn.classList.remove("btn-loading");
   }
 }; // --- LOAD SAVED THEME SETTINGS ---
 window.loadThemeSettings = async () => {
@@ -2550,6 +2591,15 @@ window.loadPaymentSettings = async () => {
       document.getElementById("koraSecretKey").value =
         data.korapay.secretKey || "";
     }
-    togglePaymentFields(); // Ensure correct fields are shown
+// --- GLOBAL TOGGLE HANDLERS ---
+window.toggleMaintenanceMode = async (isChecked) => {
+  try {
+    if (!(await verifyAdminBiometric())) return;
+    const configRef = doc(db, "flash-sales", "auth", "settings", "config");
+    await updateDoc(configRef, { isMaintenance: isChecked });
+  } catch (err) {
+    console.error("Maintenance Switch Error:", err);
   }
 };
+
+window.loadPaymentSettings();
